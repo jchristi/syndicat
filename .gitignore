@@ -1,0 +1,20 @@
+# Vim
+*.swo
+*.swp
+.tern-project
+
+# Node
+node_modules
+
+# SQLite
+*.db
+*.db-shm
+*.db-wal
+*.db.bak
+
+# Vagrant
+.vagrant*
+
+# Unnecessary files
+models/generated
+models/ttrss/*
