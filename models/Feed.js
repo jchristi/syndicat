@@ -14,7 +14,7 @@ var DAEMON_SLEEP_INTERVAL = 120;
 var tableNamePrefix = 'ttrss_';
 
 module.exports = function(sequelize, DataTypes) {
-  var model_utils = new ModelUtils(sequelize);
+  var model_utils = new ModelUtils(sequelize.options.dialect);
   var Feed = sequelize.define('Feed', {
 
     //
@@ -211,7 +211,7 @@ module.exports = function(sequelize, DataTypes) {
         models.importModels([ 'User', 'FeedCategory' ]);
         models.Feed.belongsTo(models.User, { foreignKey: 'owner_uid' });
         models.Feed.belongsTo(models.FeedCategory, { foreignKey: 'cat_id' });
-        // console.log('Ran associations for Feed');
+        // models.Feed.hasMany(models.Entry, { foreignKey: 'feed_id' });
       }
 
     }, // end class methods
@@ -238,15 +238,15 @@ module.exports = function(sequelize, DataTypes) {
        *
        * return only feeds owned by users who have logged in recently
        */
-      ownersRecentlyLoggedIn: () => {
+      ownersRecentlyLoggedIn: function() {
+        // if in single user mode, return all feeds
         if (false/*config.SINGLE_USER_MODE*/ &&
-            global.DAEMON_UPDATE_LOGIN_LIMIT > 0) {
+            DAEMON_UPDATE_LOGIN_LIMIT > 0) {
           console.log('SINGLE USER MODE');
-          // if in single user mode, return all feeds
           return {};
         }
-        let recent_time_threshold = model_utils.nowMinusNumDays(
-          global.DAEMON_UPDATE_LOGIN_LIMIT);
+        let recent_time_threshold = model_utils
+          .nowMinusNumDays(DAEMON_UPDATE_LOGIN_LIMIT);
         return {
           include: [{
             model: 'User',
@@ -341,10 +341,6 @@ module.exports = function(sequelize, DataTypes) {
 
       /**
        * Custom manager to get the top X most subscribed feeds
-       *
-       * @param int limit the number of feeds to return
-       * @param array columns the columns to return
-       * @return Promise a promise for the query
        */
       mostSubscribed: () => {
         /*function(limit, columns) {

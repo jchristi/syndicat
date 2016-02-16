@@ -1,17 +1,19 @@
 "use strict"
 
-var co = require('co');
-var chai = require('chai');
-var chaiAsPromised = require('chai-as-promised');
-var Sequelize = require('sequelize');
-var crypto = Sequelize.Promise.promisifyAll(require('crypto'));
-var fs = Sequelize.Promise.promisifyAll(require('fs'));
-var path = require('path');
-var _ = require('lodash');
-var models = require('../models');
+var l               = require('lodash');
+var co              = require('co');
+var path            = require('path');
+var chai            = require('chai');
+var chaiAsPromised  = require('chai-as-promised');
+var Sequelize       = require('sequelize');
+var Promise         = Sequelize.Promise;
+var crypto          = Promise.promisifyAll(require('crypto'));
+var fs              = Promise.promisifyAll(require('fs'));
+var models          = require('../models');
 
 chai.use(chaiAsPromised);
 
+global.l = l;
 global.co = co;
 global.chai = chai;
 global.expect = chai.expect;

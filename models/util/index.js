@@ -4,8 +4,10 @@
 // Util functions
 //
 
-var util = function(sequelize) {
-  this.sequelize = sequelize;
+var util = function(sql_dialect) {
+  if (sql_dialect !== 'mysql' && sql_dialect !== 'pgsql')
+    sql_dialect = 'sqlite'
+  this.sql_dialect = sql_dialect;
 };
 
 /**
@@ -13,7 +15,7 @@ var util = function(sequelize) {
  * (SQLite uses the same format)
  */
 util.prototype.toMySqlDateTime = function(date) {
-  if (typeof date !== Date) return null;
+  if (typeof date !== Date) return date;
   return date.toISOString().slice(0,19).replace('T', ' ');
 };
 
@@ -21,7 +23,7 @@ util.prototype.toMySqlDateTime = function(date) {
  * Convert JavaScript Date object to PostgreSQL TIMESTAMP
  */
 util.prototype.toPgTimestamp = function(date) {
-  if (typeof date !== Date) return null;
+  if (typeof date !== Date) return date;
   return date.getTime();
 };
 
@@ -29,15 +31,15 @@ util.prototype.toPgTimestamp = function(date) {
  * Do Date math
  */
 util.prototype.nowMinusNumDays = function(days) {
-  // TODO: check if days is positive integer
-  let date = new Date(date.getTime() - (days * 24 * 60 * 60 * 1000))
+  if (days < 0) days = 0;
+  let date = new Date((new Date).getTime() - (days * 24 * 60 * 60 * 1000))
 
   // PostgreSQL driver for sequelize uses TIMESTAMP for DataType.DATE
-  if (this.sequelize.options.dialect === 'pgsql')
-    return util.toPgTimestamp(date);
+  if (this.sql_dialect === 'pgsql')
+    return this.toPgTimestamp(date);
 
   // Assume MySQL or SQLite
-  return util.toMySqlDateTime(date);
+  return this.toMySqlDateTime(date);
 }
 
 module.exports = util;

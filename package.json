@@ -10,8 +10,7 @@
     "jshint": "jshint models",
     "precommit": "npm test",
     "postmerge": "npm install",
-    "test3": "npm run jshint"
-    // "test": "ava"
+    "test": "npm run jshint"
   },
   "keywords": [
     "rss",
@@ -34,7 +33,6 @@
     "yargs": "^3.32.0"
   },
   "devDependencies": {
-    // "ava": "^0.11.0",
     "chai": "^3.5.0",
     "chai-as-promised": "^5.2.0",
     "jshint": "^2.9.1",

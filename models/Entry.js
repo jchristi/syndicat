@@ -1,7 +1,13 @@
 "use strict"
 
 module.exports = function(sequelize, DataTypes) {
-  return sequelize.define('Entry', {
+
+  /**
+   * Entry
+   *
+   *
+   */
+  var Entry = sequelize.define('Entry', {
     id: {
       type: DataTypes.INTEGER(11),
       allowNull: false,
@@ -73,7 +79,27 @@ module.exports = function(sequelize, DataTypes) {
       allowNull: true
     }
   }, {
+
+    //
+    // Options
+    //
+
     tableName: 'ttrss_entries',
-    freezeTableName: true
-  });
+
+    //
+    // static methods
+    //
+
+    classMethods: {
+
+      associate: models => {
+        models.importModels(['Enclosure']);
+        models.Entry.hasMany(models.Enclosure, { foreignKey: 'post_id' });
+      }
+
+    } // end static methods
+
+  }); // end Entry
+
+  return Entry;
 };
