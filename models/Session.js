@@ -1,15 +1,11 @@
 "use strict"
 
 module.exports = function(sequelize, DataTypes) {
-  return sequelize.define('Session', {
+  var Session = sequelize.define('Session', {
     id: {
       type: DataTypes.STRING,
       allowNull: false,
-      primaryKey: true/*,
-      references: {
-        model: '',
-        key: ''
-      }*/
+      primaryKey: true
     },
     data: {
       type: DataTypes.TEXT,
@@ -21,6 +17,6 @@ module.exports = function(sequelize, DataTypes) {
     }
   }, {
     tableName: 'ttrss_sessions',
-    freezeTableName: true
   });
+  return Session;
 };

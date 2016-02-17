@@ -1,15 +1,11 @@
 "use strict"
 
 module.exports = function(sequelize, DataTypes) {
-  return sequelize.define('FilterType', {
+  var FilterType = sequelize.define('FilterType', {
     id: {
       type: DataTypes.INTEGER(11),
       allowNull: false,
-      primaryKey: true/*,
-      references: {
-        model: '',
-        key: ''
-      }*/
+      primaryKey: true
     },
     name: {
       type: DataTypes.STRING,
@@ -21,6 +17,12 @@ module.exports = function(sequelize, DataTypes) {
     }
   }, {
     tableName: 'ttrss_filter_types',
-    freezeTableName: true
+    classMethods: {
+      associate: models => {
+        models.importModels(['Filter2Rule']);
+        models.hasMany(models.Filter2Rule, { foreignKey: 'filter_type' });
+      }
+    }
   });
+  return FilterType;
 };

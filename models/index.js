@@ -75,6 +75,7 @@ DB.prototype.importAllModels = co.wrap(function* () {
   });
 
   // import models using found valid files
+  var models_imported = [];
   model_filenames.forEach(file => {
     let model = this.sequelize.import(path.join(this.model_dir, file));
     this.log('Imported', file);
@@ -115,7 +116,7 @@ DB.prototype.syncModels = co.wrap(function* (model_names) {
 });
 
 // Sync all models
-DB.prototype.syncAllModels = function(model_names) {
+DB.prototype.syncAllModels = function() {
   return this.syncModels(this.models_imported);
 };
 

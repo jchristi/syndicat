@@ -5,18 +5,14 @@ module.exports = function(sequelize, DataTypes) {
   /**
    * Filter Action
    *
-   * Enumeration of the following values: 
+   * Enumeration of the following values:
    *  filter, catchup, mark, tag, publish, score, label, stop, plugin
    */
   var FilterAction = sequelize.define('FilterAction', {
     id: {
       type: DataTypes.INTEGER(11),
       allowNull: false,
-      primaryKey: true/*,
-      references: {
-        model: '',
-        key: ''
-      }*/
+      primaryKey: true
     },
     name: {
       type: DataTypes.STRING,
@@ -28,7 +24,12 @@ module.exports = function(sequelize, DataTypes) {
     }
   }, {
     tableName: 'ttrss_filter_actions',
-    freezeTableName: true
+    classMethods: {
+      associate: models => {
+        models.importModels(['Filter2Action']);
+        models.FilterAction.hasMany(models.Filter2Action, { foreignKey: 'action_id' });
+      }
+    }
   });
 
  return FilterAction;

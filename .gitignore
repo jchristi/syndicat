@@ -17,4 +17,3 @@ node_modules
 
 # Unnecessary files
 models/generated
-models/ttrss/*

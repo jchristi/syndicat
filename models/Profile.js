@@ -1,7 +1,7 @@
 "use strict"
 
 module.exports = function(sequelize, DataTypes) {
-  return sequelize.define('Profile', {
+  var Profile = sequelize.define('Profile', {
     id: {
       type: DataTypes.INTEGER(11),
       allowNull: false,
@@ -14,15 +14,16 @@ module.exports = function(sequelize, DataTypes) {
     },
     owner_uid: {
       type: DataTypes.INTEGER(11),
-      allowNull: false,
-      references: {
-        // model: 'ttrss_users',
-        model: 'User',
-        key: 'id'
-      }
+      allowNull: false
     }
   }, {
     tableName: 'ttrss_settings_profiles',
-    // freezeTableName: true
+    classMethods: {
+      associate: models => {
+        models.importModels(['User']);
+        models.Profile.belongsTo(models.User, { foreignKey: 'owner_uid' });
+      }
+    }
   });
+  return Profile;
 };

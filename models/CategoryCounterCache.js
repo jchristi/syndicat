@@ -20,7 +20,6 @@ module.exports = function(sequelize, DataTypes) {
       allowNull: false
     }
   }, {
-    tableName: 'ttrss_cat_counters_cache',
-    freezeTableName: true
+    tableName: 'ttrss_cat_counters_cache'
   });
 };

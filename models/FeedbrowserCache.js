@@ -19,7 +19,6 @@ module.exports = function(sequelize, DataTypes) {
       allowNull: false
     }
   }, {
-    tableName: 'ttrss_feedbrowser_cache',
-    freezeTableName: true
+    tableName: 'ttrss_feedbrowser_cache'
   });
 };

@@ -1,7 +1,7 @@
 "use strict"
 
 module.exports = function(sequelize, DataTypes) {
-  return sequelize.define('LinkedFeed', {
+  var LinkedFeed = sequelize.define('LinkedFeed', {
     feed_url: {
       type: DataTypes.TEXT,
       allowNull: false
@@ -24,12 +24,7 @@ module.exports = function(sequelize, DataTypes) {
     },
     instance_id: {
       type: DataTypes.INTEGER(11),
-      allowNull: false,
-      references: {
-        model: 'ttrss_linked_instances',
-        // model: 'LinkedInstance',
-        key: 'id'
-      }
+      allowNull: false
     },
     subscribers: {
       type: DataTypes.INTEGER(11),
@@ -37,6 +32,12 @@ module.exports = function(sequelize, DataTypes) {
     }
   }, {
     tableName: 'ttrss_linked_feeds',
-    freezeTableName: true
+    classMethods: {
+      associate: models => {
+        models.importModels(['LinkedInstance']);
+        models.LinkedFeed.belongsTo(models.LinkedInstance, { foreignKey: 'instance_id' });
+      }
+    }
   });
+  return LinkedFeed;
 };

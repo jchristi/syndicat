@@ -1,7 +1,7 @@
 "use strict"
 
 module.exports = function(sequelize, DataTypes) {
-  return sequelize.define('Preference', {
+  var Preference = sequelize.define('Preference', {
     pref_name: {
       type: DataTypes.STRING,
       allowNull: false,
@@ -9,22 +9,12 @@ module.exports = function(sequelize, DataTypes) {
     },
     type_id: {
       type: DataTypes.INTEGER(11),
-      allowNull: false,
-      references: {
-        // model: 'ttrss_prefs_types',
-        model: 'PreferenceType',
-        key: 'id'
-      }
+      allowNull: false
     },
     section_id: {
       type: DataTypes.INTEGER(11),
       allowNull: false,
-      defaultValue: '1',
-      references: {
-        // model: 'ttrss_prefs_sections',
-        model: 'PreferenceSection',
-        key: 'id'
-      }
+      defaultValue: '1'
     },
     access_level: {
       type: DataTypes.INTEGER(11),
@@ -37,6 +27,13 @@ module.exports = function(sequelize, DataTypes) {
     }
   }, {
     tableName: 'ttrss_prefs',
-    // freezeTableName: true
+    classMethods: {
+      associate: models => {
+        models.importModels(['PreferenceType','PreferenceSection']);
+        models.Preference.belongsTo(models.PreferenceType, { foreignKey: 'type_id' });
+        models.Preference.belongsTo(models.PreferenceSection, { foreignKey: 'section_id' });
+      }
+    }
   });
+  return Preference;
 };

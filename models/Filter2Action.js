@@ -1,7 +1,7 @@
 "use strict"
 
 module.exports = function(sequelize, DataTypes) {
-  return sequelize.define('Filter2Action', {
+  var Filter2Action = sequelize.define('Filter2Action', {
     id: {
       type: DataTypes.INTEGER(11),
       allowNull: false,
@@ -10,22 +10,12 @@ module.exports = function(sequelize, DataTypes) {
     },
     filter_id: {
       type: DataTypes.INTEGER(11),
-      allowNull: false,
-      references: {
-        model: 'ttrss_filters2',
-        // model: 'Filter2',
-        key: 'id'
-      }
+      allowNull: false
     },
     action_id: {
       type: DataTypes.INTEGER(11),
       allowNull: false,
-      defaultValue: '1',
-      references: {
-        model: 'ttrss_filter_actions',
-        // model: 'FilterAction',
-        key: 'id'
-      }
+      defaultValue: '1'
     },
     action_param: {
       type: DataTypes.STRING,
@@ -34,6 +24,13 @@ module.exports = function(sequelize, DataTypes) {
     }
   }, {
     tableName: 'ttrss_filters2_actions',
-    freezeTableName: true
+    classMethods: {
+      associate: models => {
+        models.importModels(['Filter2','FilterAction']);
+        models.Filter2Action.belongsTo(model.Filter2, { foreignKey: 'filter_id' });
+        models.Filter2Action.belongsTo(model.FilterAction, { foreignKey: 'action_id' });
+      }
+    }
   });
+  return Filter2Action;
 };

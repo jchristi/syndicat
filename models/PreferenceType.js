@@ -1,7 +1,7 @@
 "use strict"
 
 module.exports = function(sequelize, DataTypes) {
-  return sequelize.define('PreferenceType', {
+  var PreferenceType sequelize.define('PreferenceType', {
     id: {
       type: DataTypes.INTEGER(11),
       allowNull: false,
@@ -13,6 +13,10 @@ module.exports = function(sequelize, DataTypes) {
     }
   }, {
     tableName: 'ttrss_prefs_types',
-    // freezeTableName: true
+    classMethods: {
+      associate: models => {
+        models.importModels(['Preference']);
+        models.PreferenceType.hasMany(models.Preference, { foreignKey: 'type_id' });
   });
+  return PreferenceTYpe;
 };

@@ -61,8 +61,12 @@ module.exports = function(sequelize, DataTypes) {
        * @param {Object} models
        */
       associate: function(models) {
-        models.importModels([ 'User', 'Feed', 'FeedCategory' ]);
+        models.importModels([ 'User', 'Feed', 'FeedCategory', 'Filter2Rule' ]);
         models.FeedCategory.belongsTo(models.User, { foreignKey: 'owner_uid' });
+        models.FeedCategory.hasMany(models.Feed, { foreignKey: 'cat_id' });
+        models.FeedCategory.hasMany(models.Filter2Rule, { foreignKey: 'cat_id' });
+
+        // Feed Category
         models.FeedCategory.hasMany(models.FeedCategory, {
           foreignKey: 'parent_cat',
           as: 'Children'
@@ -71,7 +75,6 @@ module.exports = function(sequelize, DataTypes) {
           foreignKey: 'parent_cat',
           as: 'Parent'
         });
-        models.FeedCategory.hasMany(models.Feed, { foreignKey: 'cat_id' });
       }
 
     } // end static methods

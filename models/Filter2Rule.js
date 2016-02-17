@@ -1,7 +1,7 @@
 "use strict"
 
 module.exports = function(sequelize, DataTypes) {
-  return sequelize.define('Filter2Rule', {
+  var Filter2Rule = sequelize.define('Filter2Rule', {
     id: {
       type: DataTypes.INTEGER(11),
       allowNull: false,
@@ -10,12 +10,7 @@ module.exports = function(sequelize, DataTypes) {
     },
     filter_id: {
       type: DataTypes.INTEGER(11),
-      allowNull: false,
-      references: {
-        model: 'ttrss_filters2',
-        // model: 'Filter2',
-        key: 'id'
-      }
+      allowNull: false
     },
     reg_exp: {
       type: DataTypes.STRING,
@@ -28,30 +23,15 @@ module.exports = function(sequelize, DataTypes) {
     },
     filter_type: {
       type: DataTypes.INTEGER(11),
-      allowNull: false,
-      references: {
-        model: 'ttrss_filter_types',
-        // model: 'FilterType',
-        key: 'id'
-      }
+      allowNull: false
     },
     feed_id: {
       type: DataTypes.INTEGER(11),
-      allowNull: true,
-      references: {
-        model: 'ttrss_feeds',
-        // model: 'Feed',
-        key: 'id'
-      }
+      allowNull: true
     },
     cat_id: {
       type: DataTypes.INTEGER(11),
-      allowNull: true,
-      references: {
-        model: 'ttrss_feed_categories',
-        // model: 'FeedCategory',
-        key: 'id'
-      }
+      allowNull: true
     },
     cat_filter: {
       type: DataTypes.BOOLEAN,
@@ -60,6 +40,15 @@ module.exports = function(sequelize, DataTypes) {
     }
   }, {
     tableName: 'ttrss_filters2_rules',
-    freezeTableName: true
+    classMethods: {
+      associate: models => {
+        models.importModels(['FeedCategory','Feed','FilterType','Filter2']);
+        models.Filter2Rule.belongsTo(models.FeedCategory, { foreignKey: 'cat_id' });
+        models.Filter2Rule.belongsTo(models.Feed, { foreignKey: 'feed_id' });
+        models.Filter2Rule.belongsTo(models.FilterType, { foreignKey: 'filter_type' });
+        models.Filter2Rule.belongsTo(models.Filter2, { foreignKey: 'filter_id' });
+      }
+    }
   });
+  return Filter2Rule;
 };

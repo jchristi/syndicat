@@ -1,7 +1,8 @@
 "use strict"
 
 module.exports = function(sequelize, DataTypes) {
-  return sequelize.define('ErrorLog', {
+
+  var ErrorLog = sequelize.define('ErrorLog', {
     id: {
       type: DataTypes.INTEGER(11),
       allowNull: false,
@@ -10,11 +11,7 @@ module.exports = function(sequelize, DataTypes) {
     },
     owner_uid: {
       type: DataTypes.INTEGER(11),
-      allowNull: true,
-      references: {
-        model: 'User',
-        key: 'id'
-      }
+      allowNull: true
     },
     errno: {
       type: DataTypes.INTEGER(11),
@@ -59,10 +56,12 @@ module.exports = function(sequelize, DataTypes) {
        * Associations
        */
       associate: (models) => {
-        models.ErrorLog.belongsTo(models.User, { foreignKey: 'owner_uid'});
+        models.ErrorLog.belongsTo(models.User, { foreignKey: 'owner_uid' });
       },
 
     } // end static methods
 
   });
+
+  return ErrorLog;
 };

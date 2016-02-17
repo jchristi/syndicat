@@ -1,7 +1,7 @@
 "use strict"
 
 module.exports = function(sequelize, DataTypes) {
-  return sequelize.define('UserEntry', {
+  var UserEntry = sequelize.define('UserEntry', {
     int_id: {
       type: DataTypes.INTEGER(11),
       allowNull: false,
@@ -10,12 +10,7 @@ module.exports = function(sequelize, DataTypes) {
     },
     ref_id: {
       type: DataTypes.INTEGER(11),
-      allowNull: false,
-      references: {
-        model: 'ttrss_entries',
-        // model: 'Entry',
-        key: 'id'
-      }
+      allowNull: false
     },
     uuid: {
       type: DataTypes.STRING,
@@ -23,30 +18,15 @@ module.exports = function(sequelize, DataTypes) {
     },
     feed_id: {
       type: DataTypes.INTEGER(11),
-      allowNull: true,
-      references: {
-        model: 'ttrss_feeds',
-        // model: 'Feed',
-        key: 'id'
-      }
+      allowNull: true
     },
     orig_feed_id: {
       type: DataTypes.INTEGER(11),
-      allowNull: true,
-      references: {
-        model: 'ttrss_archived_feeds',
-        // model: 'ArchivedFeed',
-        key: 'id'
-      }
+      allowNull: true
     },
     owner_uid: {
       type: DataTypes.INTEGER(11),
-      allowNull: false,
-      references: {
-        model: 'ttrss_users',
-        // model: 'User',
-        key: 'id'
-      }
+      allowNull: false
     },
     marked: {
       type: DataTypes.BOOLEAN,
@@ -94,6 +74,20 @@ module.exports = function(sequelize, DataTypes) {
     }
   }, {
     tableName: 'ttrss_user_entries',
-    freezeTableName: true
+    name: {
+      singular: 'UserEntry',
+      plural: 'UserEntries'
+    },
+    classMethods: {
+      associate: models => {
+        models.importModels(['Entry','Feed','ArchivedFeed','User','Tag']);
+        UserEntry.belongsTo(models.Entry, { foreignKey: 'ref_id' });
+        UserEntry.belongsTo(models.Feed, { foreignKey: 'feed_id' });
+        UserEntry.belongsTo(models.ArchivedFeed, { foreignKey: 'orig_feed_id' });
+        UserEntry.belongsTo(models.User, { foreignKey: 'owner_uid' });
+        UserEntry.hasMany(models.Tag, { foreignKey: 'post_int_id' });
+      }
+    }
   });
+  return UserEntry;
 };

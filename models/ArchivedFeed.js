@@ -54,8 +54,9 @@ module.exports = function(sequelize, DataTypes) {
        * @param {Object} models
        */
       associate: function(models) {
-        models.importModels([ 'User' ]);
+        models.importModels(['User','UserEntry']);
         ArchivedFeed.belongsTo(models.User, { foreignKey: 'owner_uid' });
+        ArchivedFeed.hasMany.(models.UserEntry { foreignKey: 'orig_feed_id' });
       }
 
     } // end static methods

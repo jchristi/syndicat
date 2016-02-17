@@ -1,7 +1,5 @@
 "use strict"
 
-var co = require('co');
-
 module.exports = function(sequelize, DataTypes) {
 
   /**

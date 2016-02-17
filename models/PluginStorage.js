@@ -1,7 +1,7 @@
 "use strict"
 
 module.exports = function(sequelize, DataTypes) {
-  return sequelize.define('PluginStorage', {
+  var PluginStorage = sequelize.define('PluginStorage', {
     id: {
       type: DataTypes.INTEGER(11),
       allowNull: false,
@@ -14,12 +14,7 @@ module.exports = function(sequelize, DataTypes) {
     },
     owner_uid: {
       type: DataTypes.INTEGER(11),
-      allowNull: false,
-      references: {
-        model: 'ttrss_users',
-        // model: 'User',
-        key: 'id'
-      }
+      allowNull: false
     },
     content: {
       type: DataTypes.TEXT,
@@ -27,6 +22,12 @@ module.exports = function(sequelize, DataTypes) {
     }
   }, {
     tableName: 'ttrss_plugin_storage',
-    freezeTableName: true
+    classMethods: {
+      associate: models => {
+        models.importModels(['User']);
+        models.PluginStorage.belongsTo(models.User, { foreignKey: 'owner_uid' });
+      }
+    }
   });
+  return PluginStorage;
 };

@@ -1,7 +1,7 @@
 "use strict"
 
 module.exports = function(sequelize, DataTypes) {
-  return sequelize.define('Filter2', {
+  var Filter2 = sequelize.define('Filter2', {
     id: {
       type: DataTypes.INTEGER(11),
       allowNull: false,
@@ -10,12 +10,7 @@ module.exports = function(sequelize, DataTypes) {
     },
     owner_uid: {
       type: DataTypes.INTEGER(11),
-      allowNull: false,
-      references: {
-        model: 'ttrss_users',
-        // model: 'User',
-        key: 'id'
-      }
+      allowNull: false
     },
     match_any_rule: {
       type: DataTypes.BOOLEAN,
@@ -44,6 +39,14 @@ module.exports = function(sequelize, DataTypes) {
     }
   }, {
     tableName: 'ttrss_filters2',
-    freezeTableName: true
+    classMethods: {
+      associate: models => {
+        models.importModels(['User','Filter2Action','Filter2Rule']);
+        models.Filter2.belongsTo(models.User, { foreignKey: 'owner_uid' });
+        models.Filter2.hasMany(models.Filter2Action, { foreignKey: 'filter_id' });
+        models.Filter2.hasMany(models.Filter2Rule, { foreignKey: 'filter_id' });
+      }
+    }
   });
+  return Filter2;
 };

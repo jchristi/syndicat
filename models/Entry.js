@@ -5,7 +5,7 @@ module.exports = function(sequelize, DataTypes) {
   /**
    * Entry
    *
-   *
+   * An individual feed entry
    */
   var Entry = sequelize.define('Entry', {
     id: {
@@ -83,6 +83,10 @@ module.exports = function(sequelize, DataTypes) {
     //
     // Options
     //
+    name: {
+      singular: 'Entry',
+      plural: 'Entries'
+    },
 
     tableName: 'ttrss_entries',
 
@@ -93,8 +97,10 @@ module.exports = function(sequelize, DataTypes) {
     classMethods: {
 
       associate: models => {
-        models.importModels(['Enclosure']);
-        models.Entry.hasMany(models.Enclosure, { foreignKey: 'post_id' });
+        models.importModels(['Enclosure', 'EntryComment', 'UserEntry']);
+        Entry.hasMany(models.Enclosure, { foreignKey: 'post_id' });
+        Entry.hasMany(models.EntryComment, { foreignKey: 'ref_id' });
+        Entry.hasMany(models.UserEntry, { foreignKey: 'ref_id' }); // TODO: as: 'UserEnties' ?
       }
 
     } // end static methods

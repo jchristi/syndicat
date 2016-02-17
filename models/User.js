@@ -105,12 +105,28 @@ module.exports = function(sequelize, DataTypes) {
           'Feed',
           'FeedCategory',
           'ArchivedFeed',
-          'AccessKey'
+          'AccessKey',
+          'EntryComment',
+          'ErrorLog',
+          'Filter2',
+          'Label',
+          'PluginStorage',
+          'Profile',
+          'Tag',
+          'UserEntry'
         ]);
-        models.User.hasMany(models.Feed, { foreignKey: 'owner_uid' });
-        models.User.hasMany(models.FeedCategory, { foreignKey: 'owner_uid' });
-        models.User.hasMany(models.ArchivedFeed, { foreignKey: 'owner_uid' });
-        models.User.hasMany(models.AccessKey, { foreignKey: 'owner_uid' });
+        User.hasMany(models.Feed, { foreignKey: 'owner_uid' });
+        User.hasMany(models.FeedCategory, { foreignKey: 'owner_uid' });
+        User.hasMany(models.ArchivedFeed, { foreignKey: 'owner_uid' });
+        User.hasMany(models.AccessKey, { foreignKey: 'owner_uid' });
+        User.hasMany(models.EntryComment, { foreignKey: 'owner_uid' });
+        User.hasMany(models.ErrorLog, { foreignKey: 'owner_uid' });
+        User.hasMany(models.Filter2, { foreignKey: 'owner_uid' });
+        User.hasMany(models.Label, { foreignKey: 'owner_uid' });
+        User.hasMany(models.PluginStorage, { foreignKey: 'owner_uid' });
+        User.hasMany(models.Profile, { foreignKey: 'owner_uid' }); // TODO: hasMany or hasOne?
+        User.hasMany(models.Tag, { foreignKey: 'owner_uid' });
+        User.hasMany(models.UserEntry, { foreignKey: 'owner_uid' }); // TODO: as 'UserEntries' ?
       }
 
     } // end static methods
