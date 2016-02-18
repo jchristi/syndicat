@@ -27,7 +27,7 @@ module.exports = function(sequelize, DataTypes) {
     classMethods: {
       associate: models => {
         models.importModels(['Filter2Action']);
-        models.FilterAction.hasMany(models.Filter2Action, { foreignKey: 'action_id' });
+        FilterAction.hasMany(models.Filter2Action, { foreignKey: 'action_id' });
       }
     }
   });

@@ -35,8 +35,8 @@ module.exports = function(sequelize, DataTypes) {
     classMethods: {
       associate: models => {
         models.importModels(['User','UserEntry']);
-        models.Tag.belongsTo(models.User, { foreignKey: 'owner_uid' });
-        models.Tag.belongsTo(models.UserEntry, { foreignKey: 'post_int_id' });
+        Tag.belongsTo(models.User, { foreignKey: 'owner_uid' });
+        Tag.belongsTo(models.UserEntry, { foreignKey: 'post_int_id' });
       }
     }
   });

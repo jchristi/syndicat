@@ -33,7 +33,7 @@ module.exports = function(sequelize, DataTypes) {
     classMethods: {
       associate: models => {
         models.importModels(['LinkedFeed']);
-        models.LinkedInstance.hasMany(models.LinkedFeed, { foreignKey: 'instance_id' });
+        LinkedInstance.hasMany(models.LinkedFeed, { foreignKey: 'instance_id' });
       }
     }
   });

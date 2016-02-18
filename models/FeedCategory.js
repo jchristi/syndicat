@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports = function(sequelize, DataTypes) {
-  return sequelize.define('FeedCategory', {
+  var FeedCategory = sequelize.define('FeedCategory', {
     id: {
       type: DataTypes.INTEGER(11),
       allowNull: false,
@@ -60,16 +60,14 @@ module.exports = function(sequelize, DataTypes) {
        */
       associate: models => {
         models.importModels([ 'User', 'Feed', 'FeedCategory', 'Filter2Rule' ]);
-        models.FeedCategory.belongsTo(models.User, { foreignKey: 'owner_uid' });
-        models.FeedCategory.hasMany(models.Feed, { foreignKey: 'cat_id' });
-        models.FeedCategory.hasMany(models.Filter2Rule, { foreignKey: 'cat_id' });
-
-        // Feed Category
-        models.FeedCategory.hasMany(models.FeedCategory, {
+        FeedCategory.belongsTo(models.User, { foreignKey: 'owner_uid' });
+        FeedCategory.hasMany(models.Feed, { foreignKey: 'cat_id' });
+        FeedCategory.hasMany(models.Filter2Rule, { foreignKey: 'cat_id' });
+        FeedCategory.hasMany(models.FeedCategory, {
           foreignKey: 'parent_cat',
           as: 'Children'
         });
-        models.FeedCategory.belongsTo(models.FeedCategory, {
+        FeedCategory.belongsTo(models.FeedCategory, {
           foreignKey: 'parent_cat',
           as: 'Parent'
         });
@@ -78,4 +76,5 @@ module.exports = function(sequelize, DataTypes) {
     } // end static methods
 
   });
+  return FeedCategory;
 };

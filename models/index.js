@@ -120,6 +120,7 @@ DB.prototype.syncAllModels = function() {
   return this.syncModels(this.models_imported);
 };
 
+
 /**
  * Create a database/model object
  */

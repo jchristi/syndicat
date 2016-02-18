@@ -21,8 +21,8 @@ module.exports = function(sequelize, DataTypes) {
     classMethods: {
       associate: models => {
         models.importModels(['User','UserPreference']);
-        models.Profile.belongsTo(models.User, { foreignKey: 'owner_uid' });
-        models.Profile.hasMany(models.UserPreference, { foreignKey: 'profile' });
+        Profile.belongsTo(models.User, { foreignKey: 'owner_uid' });
+        Profile.hasMany(models.UserPreference, { foreignKey: 'profile' });
       }
     }
   });

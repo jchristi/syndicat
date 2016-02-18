@@ -16,7 +16,7 @@ module.exports = function(sequelize, DataTypes) {
     classMethods: {
       associate: models => {
         models.importModels(['Preference']);
-        models.PreferenceType.hasMany(models.Preference, { foreignKey: 'type_id' });
+        PreferenceType.hasMany(models.Preference, { foreignKey: 'type_id' });
       }
     }
   });

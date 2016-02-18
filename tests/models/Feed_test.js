@@ -5,48 +5,57 @@ describe('Feed', function() {
   var ctx = {};
 
   afterEach('delete db and ctx', function(done){
-    // try { db.sequelize.close(); } catch(e) {}
     db.sequelize.close();
     db = null;
     ctx = {};
     done();
   });
 
-  describe('with fixtures', function() {
-    beforeEach('create Feed fixtures', co.wrap(function* () {
+  describe('associations', function() {
+    beforeEach('import models', co.wrap(function* (){
       db = yield getTestDB();
       let _result = yield db.loadModels(['Feed']);
-      // TODO: create and load from json fixture files
-      // XXX: create a fixture factory instead???
-      ctx.user1 = yield db.User.create({
-        id: 2,
-        title: 'Test user',
-        login: 'admin',
-        full_name: 'Admin admin',
-        pwd_hash: '*********',
-        salt: '*************',
-      });
-      ctx.feed1 = yield db.Feed.create({
-        id: 2,
-        title: 'Test feed 1',
-        feed_url: 'http://xkcd.com/rss.xml', // 'http://www.winehq.org/news/rss/',
-        owner_uid: 2,
+    }));
+    it('has User property', function(done) {
+      expect(db.Feed.associations).to.have.property('User');
+      done();
+    });
+    it('has FeedCategory property', function(done) {
+      expect(db.Feed.associations).to.have.property('FeedCategory');
+      done();
+    });
+    it('has Entry property', function(done) {
+      expect(db.Feed.associations).to.have.property('Entries');
+      done();
+    });
+    it('has Filter2Rule', function(done) {
+      expect(db.Feed.associations).to.have.property('Filter2Rules');
+      done();
+    });
+  });
+
+  describe.skip('with fixtures', function() {
+    beforeEach('create Feed fixtures', co.wrap(function* () {
+      db = yield getTestDB();
+      let _result = yield db.loadModels(['User','Feed']);
+      ctx.user1 = yield db.createTestModel('User', { id: 2,
+        title: 'Test user', login: 'admin' });
+      ctx.feed1 = yield db.createTestModel('Feed', { id: 2,
+        title: 'Test feed 1', owner_uid: 2,
+        feed_url: 'http://xkcd.com/rss.xml' // 'http://www.winehq.org/news/rss/',
       });
     }));
     it('has User property', co.wrap(function* () {
-      expect(db.Feed.associations).to.have.property('User');
       let feed = yield db.Feed.findOne({ include: [ db.User ]});
       expect(feed).to.have.property('User');
     }));
-
     it('has FeedCategory property', co.wrap(function* () {
-      expect(db.Feed.associations).to.have.property('FeedCategory');
       let feed = yield db.Feed.findOne({ include: [ db.FeedCategory ]});
       expect(feed).to.have.property('FeedCategory');
     }));
   });
 
-  describe('scopes', function() {
+  describe.skip('scopes', function() {
     beforeEach('import models', co.wrap(function* (){
       db = yield getTestDB();
       let _result = yield db.loadModels(['Feed','User']);
@@ -73,7 +82,7 @@ describe('Feed', function() {
     });
     describe.skip('with fixtures', function(){
       it('ownersRecentlyLoggedIn returns a list of feeds from recently logged in users',
-          co.wrap(function* () {
+      co.wrap(function* () {
         let result = yield db.Feed.scope('ownersRecentlyLoggedIn').findAll();
         console.log('result', result);
       }));

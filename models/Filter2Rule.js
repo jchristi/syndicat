@@ -43,10 +43,10 @@ module.exports = function(sequelize, DataTypes) {
     classMethods: {
       associate: models => {
         models.importModels(['FeedCategory','Feed','FilterType','Filter2']);
-        models.Filter2Rule.belongsTo(models.FeedCategory, { foreignKey: 'cat_id' });
-        models.Filter2Rule.belongsTo(models.Feed, { foreignKey: 'feed_id' });
-        models.Filter2Rule.belongsTo(models.FilterType, { foreignKey: 'filter_type' });
-        models.Filter2Rule.belongsTo(models.Filter2, { foreignKey: 'filter_id' });
+        Filter2Rule.belongsTo(models.FeedCategory, { foreignKey: 'cat_id' });
+        Filter2Rule.belongsTo(models.Feed, { foreignKey: 'feed_id' });
+        Filter2Rule.belongsTo(models.FilterType, { foreignKey: 'filter_type' });
+        Filter2Rule.belongsTo(models.Filter2, { foreignKey: 'filter_id' });
       }
     }
   });

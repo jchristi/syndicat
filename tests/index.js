@@ -21,6 +21,31 @@ global.fs = fs;
 
 
 /**
+ * model factory
+ */
+var createTestModel = co.wrap(function* (model_name, attrs) {
+  attrs = (attrs == null) ? {} : attrs;
+  let _loaded_models = yield this.loadModels([model_name]);
+  let model = this[model_name];
+  l.forIn(model.attributes, (attr, key) => {
+    if (l.has(attrs, key)) return;
+    if (!l.has(attr, '_modelAttribute')) return;
+    if (attr.allowNull) return;
+    if (attr.defaultValue) return;
+    // random int
+    if (l.has(attr, 'type._unsigned')) {
+      attrs[key] = Math.floor(Math.random() * (99999) + 1);
+    } else {
+    // random string
+      let hash = crypto.randomBytes(14);
+      attrs[key] = hash.toString('hex').substr(0,8);
+    }
+  });
+  return yield model.create(attrs);
+});
+
+
+/**
  * get a test database
  */
 global.getTestDB = co.wrap(function* () {
@@ -41,5 +66,7 @@ global.getTestDB = co.wrap(function* () {
     }
   });
   let _result = yield sequelize.query('PRAGMA journal_mode=MEMORY');
-  return models.getDB(sequelize);
+  let db = yield models.getDB(sequelize);
+  db.createTestModel = createTestModel;
+  return db;
 });

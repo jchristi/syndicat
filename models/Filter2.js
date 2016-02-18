@@ -42,9 +42,9 @@ module.exports = function(sequelize, DataTypes) {
     classMethods: {
       associate: models => {
         models.importModels(['User','Filter2Action','Filter2Rule']);
-        models.Filter2.belongsTo(models.User, { foreignKey: 'owner_uid' });
-        models.Filter2.hasMany(models.Filter2Action, { foreignKey: 'filter_id' });
-        models.Filter2.hasMany(models.Filter2Rule, { foreignKey: 'filter_id' });
+        Filter2.belongsTo(models.User, { foreignKey: 'owner_uid' });
+        Filter2.hasMany(models.Filter2Action, { foreignKey: 'filter_id' });
+        Filter2.hasMany(models.Filter2Rule, { foreignKey: 'filter_id' });
       }
     }
   });

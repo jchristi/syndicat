@@ -30,9 +30,9 @@ module.exports = function(sequelize, DataTypes) {
     classMethods: {
       associate: models => {
         models.importModels(['PreferenceType','PreferenceSection','UserPreference']);
-        models.Preference.belongsTo(models.PreferenceType, { foreignKey: 'type_id' });
-        models.Preference.belongsTo(models.PreferenceSection, { foreignKey: 'section_id' });
-        models.Preference.hasMany(models.UserPreference, { foreignKey: 'pref_name' });
+        Preference.belongsTo(models.PreferenceType, { foreignKey: 'type_id' });
+        Preference.belongsTo(models.PreferenceSection, { foreignKey: 'section_id' });
+        Preference.hasMany(models.UserPreference, { foreignKey: 'pref_name' });
       }
     }
   });

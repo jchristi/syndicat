@@ -35,7 +35,7 @@ module.exports = function(sequelize, DataTypes) {
     classMethods: {
       associate: models => {
         models.importModels(['LinkedInstance']);
-        models.LinkedFeed.belongsTo(models.LinkedInstance, { foreignKey: 'instance_id' });
+        LinkedFeed.belongsTo(models.LinkedInstance, { foreignKey: 'instance_id' });
       }
     }
   });

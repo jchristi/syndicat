@@ -2,16 +2,18 @@
 
 describe('Entry', function() {
   var db;
-  var ctx = {};
+  var _ctx = {};
 
-  beforeEach('create Entry fixtures', co.wrap(function* () {
-    db = yield getTestDB();
-    let _result = yield db.loadModels(['Enclosure','Entry']);
-  }));
-
-  it('has Entry property', function(done) {
-    expect(db.Entry.associations).to.have.property('Enclosures');
-    done();
+  describe('associations', function() {
+    beforeEach('create Entry fixtures', co.wrap(function* () {
+      db = yield getTestDB();
+      let _result = yield db.loadModels(['Entry']);
+      _result = yield db.associateAllModels();
+    }));
+    it('has Enclosures property', function(done) {
+      expect(db.Entry.associations).to.have.property('Enclosures');
+      done();
+    });
   });
 
 });

@@ -209,10 +209,10 @@ module.exports = function(sequelize, DataTypes) {
        */
       associate: function(models) {
         models.importModels([ 'User', 'FeedCategory', 'Entry', 'Filter2Rule' ]);
-        models.Feed.belongsTo(models.User, { foreignKey: 'owner_uid' });
-        models.Feed.belongsTo(models.FeedCategory, { foreignKey: 'cat_id' });
-        models.Feed.hasMany(models.Entry, { foreignKey: 'feed_id' });
-        models.Feed.hasMany(models.Filter2Rule, { foreignKey: 'feed_id' });
+        Feed.belongsTo(models.User, { foreignKey: 'owner_uid' });
+        Feed.belongsTo(models.FeedCategory, { foreignKey: 'cat_id' });
+        Feed.hasMany(models.Entry, { foreignKey: 'feed_id' });
+        Feed.hasMany(models.Filter2Rule, { foreignKey: 'feed_id' });
       }
 
     }, // end class methods

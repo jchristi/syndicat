@@ -46,8 +46,8 @@ module.exports = function(sequelize, DataTypes) {
     classMethods: {
       associate: models => {
         models.importModels(['User','Entry']);
-        models.EntryComment.belongsTo(models.User, { foreignKey: 'owner_uid' });
-        models.EntryComment.belongsTo(models.Entry, { foreignKey: 'ref_id' });
+        EntryComment.belongsTo(models.User, { foreignKey: 'owner_uid' });
+        EntryComment.belongsTo(models.Entry, { foreignKey: 'ref_id' });
       }
     } // end static methods
 

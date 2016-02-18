@@ -56,7 +56,8 @@ module.exports = function(sequelize, DataTypes) {
        * Associations
        */
       associate: (models) => {
-        models.ErrorLog.belongsTo(models.User, { foreignKey: 'owner_uid' });
+        models.importModels(['User']);
+        ErrorLog.belongsTo(models.User, { foreignKey: 'owner_uid' });
       }
 
     } // end static methods

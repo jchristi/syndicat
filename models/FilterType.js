@@ -20,7 +20,7 @@ module.exports = function(sequelize, DataTypes) {
     classMethods: {
       associate: models => {
         models.importModels(['Filter2Rule']);
-        models.hasMany(models.Filter2Rule, { foreignKey: 'filter_type' });
+        FilterType.hasMany(models.Filter2Rule, { foreignKey: 'filter_type' });
       }
     }
   });

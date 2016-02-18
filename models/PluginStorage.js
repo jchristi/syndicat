@@ -25,7 +25,7 @@ module.exports = function(sequelize, DataTypes) {
     classMethods: {
       associate: models => {
         models.importModels(['User']);
-        models.PluginStorage.belongsTo(models.User, { foreignKey: 'owner_uid' });
+        PluginStorage.belongsTo(models.User, { foreignKey: 'owner_uid' });
       }
     }
   });
