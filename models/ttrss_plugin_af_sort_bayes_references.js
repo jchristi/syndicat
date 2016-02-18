@@ -1,4 +1,4 @@
-"use strict"
+'use strict';
 
 module.exports = function(sequelize, DataTypes) {
   return sequelize.define('ttrss_plugin_af_sort_bayes_references', {

@@ -1,8 +1,7 @@
-"use strict"
+'use strict';
 
 var l               = require('lodash');
 var co              = require('co');
-var path            = require('path');
 var chai            = require('chai');
 var chaiAsPromised  = require('chai-as-promised');
 var Sequelize       = require('sequelize');
@@ -25,8 +24,8 @@ global.fs = fs;
  * get a test database
  */
 global.getTestDB = co.wrap(function* () {
-  // let logging = console.log;
-  let logging = null;
+  // let _logging = console.log;
+  let _logging = null;
   let hash = yield crypto.randomBytesAsync(15);
   let name = 'test-' + hash.toString('base64').substr(0, 14);
   let sequelize = new Sequelize(name, 'username', 'password', {

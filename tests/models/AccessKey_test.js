@@ -1,4 +1,4 @@
-"use strict"
+'use strict';
 
 describe('AccessKey', function() {
   var db;

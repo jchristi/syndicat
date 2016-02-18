@@ -1,4 +1,4 @@
-"use strict"
+'use strict';
 
 module.exports = function(sequelize, DataTypes) {
   var Session = sequelize.define('Session', {
@@ -16,7 +16,7 @@ module.exports = function(sequelize, DataTypes) {
       allowNull: false
     }
   }, {
-    tableName: 'ttrss_sessions',
+    tableName: 'ttrss_sessions'
   });
   return Session;
 };

@@ -1,4 +1,4 @@
-"use strict"
+'use strict';
 
 module.exports = function(sequelize, DataTypes) {
   var Filter2Action = sequelize.define('Filter2Action', {
@@ -27,8 +27,8 @@ module.exports = function(sequelize, DataTypes) {
     classMethods: {
       associate: models => {
         models.importModels(['Filter2','FilterAction']);
-        models.Filter2Action.belongsTo(model.Filter2, { foreignKey: 'filter_id' });
-        models.Filter2Action.belongsTo(model.FilterAction, { foreignKey: 'action_id' });
+        models.Filter2Action.belongsTo(models.Filter2, { foreignKey: 'filter_id' });
+        models.Filter2Action.belongsTo(models.FilterAction, { foreignKey: 'action_id' });
       }
     }
   });

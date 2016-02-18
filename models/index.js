@@ -1,4 +1,4 @@
-"use strict"
+'use strict';
 
 var l         = require('lodash');
 var co        = require('co');

@@ -1,4 +1,4 @@
-"use strict"
+'use strict';
 
 module.exports = function(sequelize, DataTypes) {
   var Profile = sequelize.define('Profile', {
@@ -20,8 +20,9 @@ module.exports = function(sequelize, DataTypes) {
     tableName: 'ttrss_settings_profiles',
     classMethods: {
       associate: models => {
-        models.importModels(['User']);
+        models.importModels(['User','UserPreference']);
         models.Profile.belongsTo(models.User, { foreignKey: 'owner_uid' });
+        models.Profile.hasMany(models.UserPreference, { foreignKey: 'profile' });
       }
     }
   });

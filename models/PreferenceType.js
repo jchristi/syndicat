@@ -1,7 +1,7 @@
-"use strict"
+'use strict';
 
 module.exports = function(sequelize, DataTypes) {
-  var PreferenceType sequelize.define('PreferenceType', {
+  var PreferenceType = sequelize.define('PreferenceType', {
     id: {
       type: DataTypes.INTEGER(11),
       allowNull: false,
@@ -17,6 +17,8 @@ module.exports = function(sequelize, DataTypes) {
       associate: models => {
         models.importModels(['Preference']);
         models.PreferenceType.hasMany(models.Preference, { foreignKey: 'type_id' });
+      }
+    }
   });
-  return PreferenceTYpe;
+  return PreferenceType;
 };

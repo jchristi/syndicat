@@ -1,27 +1,24 @@
-"use strict"
+'use strict';
 
 module.exports = function(sequelize, DataTypes) {
-  return sequelize.define('UserLabel', {
+  var UserLabel = sequelize.define('UserLabel', {
     label_id: {
       type: DataTypes.INTEGER(11),
-      allowNull: false,
-      references: {
-        model: 'ttrss_labels2',
-        // model: 'Label',
-        key: 'id'
-      }
+      allowNull: false
     },
     article_id: {
       type: DataTypes.INTEGER(11),
-      allowNull: false,
-      references: {
-        model: 'ttrss_entries',
-        // model: 'Entry',
-        key: 'id'
-      }
+      allowNull: false
     }
   }, {
     tableName: 'ttrss_user_labels2',
-    freezeTableName: true
+    classMethods: {
+      associate: models => {
+        models.importModels(['Label','Entry']);
+        UserLabel.belongsTo(models.Label, { foreignKey: 'label_id' });
+        UserLabel.belongsTo(models.Entry, { foreignKey: 'article_id' });
+      }
+    }
   });
+  return UserLabel;
 };

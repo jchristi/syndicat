@@ -1,4 +1,4 @@
-"use strict"
+'use strict';
 
 describe('Feed', function() {
   var db; // TODO: this is actually a really dumb way to pass context

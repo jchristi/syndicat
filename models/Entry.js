@@ -1,4 +1,4 @@
-"use strict"
+'use strict';
 
 module.exports = function(sequelize, DataTypes) {
 
@@ -97,10 +97,11 @@ module.exports = function(sequelize, DataTypes) {
     classMethods: {
 
       associate: models => {
-        models.importModels(['Enclosure', 'EntryComment', 'UserEntry']);
+        models.importModels(['Enclosure', 'EntryComment', 'UserEntry','UserLabel']);
         Entry.hasMany(models.Enclosure, { foreignKey: 'post_id' });
         Entry.hasMany(models.EntryComment, { foreignKey: 'ref_id' });
         Entry.hasMany(models.UserEntry, { foreignKey: 'ref_id' }); // TODO: as: 'UserEnties' ?
+        Entry.hasMany(models.UserLabel, { foreignKey: 'label_id' });
       }
 
     } // end static methods

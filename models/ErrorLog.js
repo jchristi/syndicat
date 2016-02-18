@@ -1,4 +1,4 @@
-"use strict"
+'use strict';
 
 module.exports = function(sequelize, DataTypes) {
 
@@ -57,7 +57,7 @@ module.exports = function(sequelize, DataTypes) {
        */
       associate: (models) => {
         models.ErrorLog.belongsTo(models.User, { foreignKey: 'owner_uid' });
-      },
+      }
 
     } // end static methods
 

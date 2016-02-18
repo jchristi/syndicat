@@ -1,6 +1,4 @@
-"use strict"
-
-var co = require('co');
+'use strict';
 
 var tableNamePrefix = 'ttrss_';
 var tableName = tableNamePrefix + 'users';
@@ -113,7 +111,8 @@ module.exports = function(sequelize, DataTypes) {
           'PluginStorage',
           'Profile',
           'Tag',
-          'UserEntry'
+          'UserEntry',
+          'UserPreference'
         ]);
         User.hasMany(models.Feed, { foreignKey: 'owner_uid' });
         User.hasMany(models.FeedCategory, { foreignKey: 'owner_uid' });
@@ -127,6 +126,7 @@ module.exports = function(sequelize, DataTypes) {
         User.hasMany(models.Profile, { foreignKey: 'owner_uid' }); // TODO: hasMany or hasOne?
         User.hasMany(models.Tag, { foreignKey: 'owner_uid' });
         User.hasMany(models.UserEntry, { foreignKey: 'owner_uid' }); // TODO: as 'UserEntries' ?
+        User.hasMany(models.UserPreference, { foreignKey: 'owner_uid' });
       }
 
     } // end static methods

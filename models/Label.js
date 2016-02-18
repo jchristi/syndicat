@@ -1,4 +1,4 @@
-"use strict"
+'use strict';
 
 module.exports = function(sequelize, DataTypes) {
   var Label = sequelize.define('Label', {
@@ -30,8 +30,9 @@ module.exports = function(sequelize, DataTypes) {
     tableName: 'ttrss_labels2',
     classMethods: {
       associate: models => {
-        models.importModels(['User']);
-        models.Label.belongsTo(models.User, { foreignKey: 'owner_uid' });
+        models.importModels(['User','UserLabel']);
+        Label.belongsTo(models.User, { foreignKey: 'owner_uid' });
+        Label.hasMany(models.UserLabel, { foreignKey: 'label_id' });
       }
     }
   });

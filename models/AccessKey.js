@@ -1,4 +1,4 @@
-"use strict"
+'use strict';
 
 module.exports = function(sequelize, DataTypes) {
 
@@ -38,7 +38,7 @@ module.exports = function(sequelize, DataTypes) {
     // user id
     owner_uid: {
       type: DataTypes.INTEGER(11),
-      allowNull: false,
+      allowNull: false
     }
 
   }, {

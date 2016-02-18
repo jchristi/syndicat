@@ -1,4 +1,4 @@
-"use strict"
+'use strict';
 
 var co = require('co');
 var l = require('lodash');
@@ -8,8 +8,8 @@ var ModelUtils = require('./util');
 
 // TODO: move these elsewhere!
 var DAEMON_UPDATE_LOGIN_LIMIT = 30; // number of days for a user to be 'inactive'
-var DAEMON_FEED_LIMIT = 500;
-var DAEMON_SLEEP_INTERVAL = 120;
+var _DAEMON_FEED_LIMIT = 500;
+var _DAEMON_SLEEP_INTERVAL = 120;
 
 var tableNamePrefix = 'ttrss_';
 
@@ -268,7 +268,7 @@ module.exports = function(sequelize, DataTypes) {
         // see: http://stackoverflow.com/questions/17976459/utc-date-in-sequelize-js
         var interval = 10000; // XXX
         var datetime_threshold = Date.now() - interval;
-        var update_interval = Date.now() - interval; // XXX
+        var _update_interval = Date.now() - interval; // XXX
         var user_pref_exists = {
           model: 'UserPreference',
           where: { value: { $ne: -1 } }
@@ -286,7 +286,7 @@ module.exports = function(sequelize, DataTypes) {
             {
              // AND ttrss_feeds.last_updated < NOW() - CAST((ttrss_feeds.update_interval || ]
              // ' minutes') AS INTERVAL)\
-              update_interval: { $lt: 0 },
+              update_interval: { $lt: 0 }
               //last_updated: { $lt: update_interval }
             },
             {
@@ -298,7 +298,7 @@ module.exports = function(sequelize, DataTypes) {
               include: [ user_pref_exists ]
             }
           ]
-        }
+        };
       },
 
       /**
@@ -325,15 +325,14 @@ module.exports = function(sequelize, DataTypes) {
        */
       needsUpdate: () => {
         return l.merge({
-            include: [
-              { model: 'UserPreference',
-                where: {
-                  pref_name: 'DEFAULT_UPDATE_INTERVAL', // TODO: add const in UserPreference cls
-                  profile: null
-                }
+          include: [
+            { model: 'UserPreference',
+              where: {
+                pref_name: 'DEFAULT_UPDATE_INTERVAL', // TODO: add const in UserPreference cls
+                profile: null
               }
-            ]
-          },
+            }
+          ]},
           this.scopes.ownersRecentlyLoggedIn,
           this.scopes.updateThresholdExceeded,
           this.scopes.notBeingUpdated

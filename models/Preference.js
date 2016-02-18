@@ -1,4 +1,4 @@
-"use strict"
+'use strict';
 
 module.exports = function(sequelize, DataTypes) {
   var Preference = sequelize.define('Preference', {
@@ -29,9 +29,10 @@ module.exports = function(sequelize, DataTypes) {
     tableName: 'ttrss_prefs',
     classMethods: {
       associate: models => {
-        models.importModels(['PreferenceType','PreferenceSection']);
+        models.importModels(['PreferenceType','PreferenceSection','UserPreference']);
         models.Preference.belongsTo(models.PreferenceType, { foreignKey: 'type_id' });
         models.Preference.belongsTo(models.PreferenceSection, { foreignKey: 'section_id' });
+        models.Preference.hasMany(models.UserPreference, { foreignKey: 'pref_name' });
       }
     }
   });

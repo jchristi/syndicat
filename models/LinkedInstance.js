@@ -1,4 +1,4 @@
-"use strict"
+'use strict';
 
 module.exports = function(sequelize, DataTypes) {
   var LinkedInstance = sequelize.define('LinkedInstance', {

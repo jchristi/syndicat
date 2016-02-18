@@ -1,4 +1,4 @@
-"use strict"
+'use strict';
 
 describe('User', function() {
   var db;

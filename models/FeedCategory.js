@@ -1,6 +1,4 @@
-"use strict"
-
-var co = require('co');
+'use strict';
 
 module.exports = function(sequelize, DataTypes) {
   return sequelize.define('FeedCategory', {
@@ -60,7 +58,7 @@ module.exports = function(sequelize, DataTypes) {
        * method used to declare all model associations
        * @param {Object} models
        */
-      associate: function(models) {
+      associate: models => {
         models.importModels([ 'User', 'Feed', 'FeedCategory', 'Filter2Rule' ]);
         models.FeedCategory.belongsTo(models.User, { foreignKey: 'owner_uid' });
         models.FeedCategory.hasMany(models.Feed, { foreignKey: 'cat_id' });

@@ -1,5 +1,8 @@
+lint:
+	./node_modules/.bin/eslint **/*.js
+
 test:
-	./node_modules/mocha/bin/mocha \
+	./node_modules/.bin/mocha \
 		--full-trace \
 		--recursive \
 		--async-only \
@@ -9,7 +12,7 @@ test:
 		tests/
 
 testdebug:
-	./node_modules/mocha/bin/mocha \
+	./node_modules/.bin/mocha \
 		--full-trace \
 		--debug \
 		--recursive \
@@ -20,7 +23,7 @@ testdebug:
 		tests/
 
 ci:
-	./node_modules/mocha/bin/mocha \
+	./node_modules/.bin/mocha \
 		--recursive \
 		--async-only \
 		--reporter spec \

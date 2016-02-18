@@ -1,7 +1,7 @@
-"use strict"
+'use strict';
 
 module.exports = function(sequelize, DataTypes) {
-  return sequelize.define('UserPreference', {
+  var UserPreference = sequelize.define('UserPreference', {
     id: {
       type: DataTypes.INTEGER(11),
       allowNull: false,
@@ -10,21 +10,11 @@ module.exports = function(sequelize, DataTypes) {
     },
     owner_uid: {
       type: DataTypes.INTEGER(11),
-      allowNull: false,
-      references: {
-        // model: 'ttrss_users',
-        model: 'User',
-        key: 'id'
-      }
+      allowNull: false
     },
     pref_name: {
       type: DataTypes.STRING,
-      allowNull: true,
-      references: {
-        // model: 'ttrss_prefs',
-        model: 'Preference',
-        key: 'pref_name'
-      }
+      allowNull: true
     },
     value: {
       type: DataTypes.TEXT,
@@ -32,15 +22,18 @@ module.exports = function(sequelize, DataTypes) {
     },
     profile: {
       type: DataTypes.INTEGER(11),
-      allowNull: true,
-      references: {
-        // model: 'ttrss_settings_profiles',
-        model: 'Profile',
-        key: 'id'
-      }
+      allowNull: true
     }
   }, {
     tableName: 'ttrss_user_prefs',
-    // freezeTableName: true
+    classMethods: {
+      associate: models => {
+        models.importModels(['User','Preference','Profile']);
+        UserPreference.belongsTo(models.User, { foreignKey: 'owner_uid' });
+        UserPreference.belongsTo(models.Preference, { foreignKey: 'pref_name' });
+        UserPreference.belongsTo(models.Profile, { foreignKey: 'profile' });
+      }
+    }
   });
+  return UserPreference;
 };

@@ -1,6 +1,4 @@
-"use strict"
-
-var co = require('co');
+'use strict';
 
 module.exports = function(sequelize, DataTypes) {
 
@@ -56,7 +54,7 @@ module.exports = function(sequelize, DataTypes) {
       associate: function(models) {
         models.importModels(['User','UserEntry']);
         ArchivedFeed.belongsTo(models.User, { foreignKey: 'owner_uid' });
-        ArchivedFeed.hasMany.(models.UserEntry { foreignKey: 'orig_feed_id' });
+        ArchivedFeed.hasMany(models.UserEntry, { foreignKey: 'orig_feed_id' });
       }
 
     } // end static methods

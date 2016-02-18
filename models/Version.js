@@ -1,13 +1,13 @@
-"use strict"
+'use strict';
 
 module.exports = function(sequelize, DataTypes) {
-  return sequelize.define('Version', {
+  var Version = sequelize.define('Version', {
     schema_version: {
       type: DataTypes.INTEGER(11),
       allowNull: false
     }
   }, {
-    tableName: 'ttrss_version',
-    freezeTableName: true
+    tableName: 'ttrss_version'
   });
+  return Version;
 };
