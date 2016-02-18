@@ -1,30 +1,24 @@
+BINDIR=./node_modules/.bin
+MOCHA=$(BINDIR)/mocha
+MOCHADEFAULTOPTS=--recursive --async-only --colors --reporter spec
+TESTDIR=tests/
+
+
 lint:
-	./node_modules/.bin/eslint **/*.js
+	$(BINDIR)/eslint **/*.js
 
 test:
-	./node_modules/.bin/mocha \
+	$(MOCHA) $(MOCHADEFAULTOPTS) \
 		--full-trace \
-		--recursive \
-		--async-only \
 		--bail \
-		--colors \
-		--reporter spec \
-		tests/
+		$(TESTDIR)
 
 testdebug:
-	./node_modules/.bin/mocha \
+	$(MOCHA) $(MOCHADEFAULTOPTS) \
 		--full-trace \
 		--debug \
-		--recursive \
-		--async-only \
 		--bail \
-		--colors \
-		--reporter spec
-		tests/
+		$(TESTDIR)
 
-ci:
-	./node_modules/.bin/mocha \
-		--recursive \
-		--async-only \
-		--reporter spec \
-		tests/
+ci: lint
+	$(MOCHA) $(MOCHADEFAULTOPTS) $(TESTDIR)
