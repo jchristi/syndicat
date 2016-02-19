@@ -2,8 +2,9 @@
 
 var co = require('co');
 var l = require('lodash');
+var moment = require('moment');
 
-var ModelUtils = require('./util');
+// var ModelUtils = require('./util');
 
 
 // TODO: move these elsewhere!
@@ -14,7 +15,7 @@ var _DAEMON_SLEEP_INTERVAL = 120;
 var tableNamePrefix = 'ttrss_';
 
 module.exports = function(sequelize, DataTypes) {
-  var model_utils = new ModelUtils(sequelize.options.dialect);
+  // var model_utils = new ModelUtils(sequelize.options.dialect);
   var Feed = sequelize.define('Feed', {
 
     //
@@ -239,20 +240,20 @@ module.exports = function(sequelize, DataTypes) {
        *
        * return only feeds owned by users who have logged in recently
        */
-      ownersRecentlyLoggedIn: function() {
+      ownersRecentlyLoggedIn: () => {
         // if in single user mode, return all feeds
-        if (false/*config.SINGLE_USER_MODE*/ &&
-            DAEMON_UPDATE_LOGIN_LIMIT > 0) {
-          console.log('SINGLE USER MODE');
+        if (false/*config.SINGLE_USER_MODE*/ ||
+            DAEMON_UPDATE_LOGIN_LIMIT < 1) {
           return {};
         }
-        let recent_time_threshold = model_utils
-          .nowMinusNumDays(DAEMON_UPDATE_LOGIN_LIMIT);
         return {
           include: [{
-            model: 'User',
+            model: sequelize.models.User,
+            attributes: [],
             where: {
-              last_login: { $gte: recent_time_threshold }
+              last_login: {
+                $gte: moment().subtract(DAEMON_UPDATE_LOGIN_LIMIT, 'days').toDate()
+              }
             }
           }]
         };
@@ -264,15 +265,16 @@ module.exports = function(sequelize, DataTypes) {
        * return only feeds that have not been updated for awhile
        */
       updateThresholdExceeded: () => {
-        // TODO: consider using moment.js (http://momentjs.com/)
         // see: http://stackoverflow.com/questions/17976459/utc-date-in-sequelize-js
         var interval = 10000; // XXX
-        var datetime_threshold = Date.now() - interval;
+        var _datetime_threshold = Date.now() - interval;
         var _update_interval = Date.now() - interval; // XXX
         var user_pref_exists = {
-          model: 'UserPreference',
+          model: sequelize.models.UserPreference,
           where: { value: { $ne: -1 } }
         };
+        // var col = sequelize.col;
+        // var fn = sequelize.fn;
         return {
           $or: [
             {
@@ -280,7 +282,8 @@ module.exports = function(sequelize, DataTypes) {
               // XXX: can this be done???
               // ttrss_feeds.last_updated < NOW() - CAST((ttrss_user_prefs.value || ' minutes') \
               // AS INTERVAL
-              last_updated: { $lt: datetime_threshold },
+              // last_updated: { $lt: datetime_threshold },
+              last_updated: { $lt: '' },
               include: [ user_pref_exists ]
             },
             {
@@ -307,12 +310,11 @@ module.exports = function(sequelize, DataTypes) {
        * return feeds that are not currently being updated
        */
       notBeingUpdated: () => {
-        let ten_minutes_ago = Date.now() - (10/*min*/ * 60/*sec*/ * 1000/*ms*/);
         return {
           last_update_started: {
             $or: {
               $eq: null,
-              $lt: ten_minutes_ago
+              $lt: moment().subtract(10, 'minutes').toDate()
             }
           }
         };
@@ -324,18 +326,20 @@ module.exports = function(sequelize, DataTypes) {
        * return feeds that need to be updated
        */
       needsUpdate: () => {
-        return l.merge({
-          include: [
-            { model: 'UserPreference',
+        let scopes = sequelize.models.Feed.options.scopes;
+        // TODO: consider combining scopes with $and
+        return l.defaultsDeep(
+          { include: [
+            { model: sequelize.models.UserPreference,
               where: {
                 pref_name: 'DEFAULT_UPDATE_INTERVAL', // TODO: add const in UserPreference cls
                 profile: null
               }
-            }
+            },
+            scopes.ownersRecentlyLoggedIn().include[0]
           ]},
-          this.scopes.ownersRecentlyLoggedIn,
-          this.scopes.updateThresholdExceeded,
-          this.scopes.notBeingUpdated
+          scopes.updateThresholdExceeded(),
+          scopes.notBeingUpdated()
         );
       },
 

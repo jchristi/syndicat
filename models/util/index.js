@@ -1,5 +1,6 @@
 'use strict';
 
+var moment = require('moment');
 //
 // Util functions
 //
@@ -16,7 +17,8 @@ var util = function(sql_dialect) {
  */
 util.prototype.toMySqlDateTime = function(date) {
   if (typeof date !== Date) return date;
-  return date.toISOString().slice(0,19).replace('T', ' ');
+  // return date.toISOString().slice(0,19).replace('T', ' ');
+  return moment(date).format('YYYY-MM-DD HH:mm:ss');
 };
 
 /**
@@ -30,9 +32,10 @@ util.prototype.toPgTimestamp = function(date) {
 /**
  * Do Date math
  */
-util.prototype.nowMinusNumDays = function(days) {
+util.prototype.daysAgo = function(days) {
   if (days < 0) days = 0;
-  let date = new Date((new Date).getTime() - (days * 24 * 60 * 60 * 1000));
+  // let date = new Date((new Date).getTime() - (days * 24 * 60 * 60 * 1000));
+  let date = moment().subtract(days, 'days').toDate();
 
   // PostgreSQL driver for sequelize uses TIMESTAMP for DataType.DATE
   if (this.sql_dialect === 'pgsql')
