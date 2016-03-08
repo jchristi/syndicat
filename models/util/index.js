@@ -1,6 +1,8 @@
 'use strict';
 
 var moment = require('moment');
+var sequelize = require('sequelize');
+
 //
 // Util functions
 //
@@ -9,6 +11,36 @@ var util = function(sql_dialect) {
   if (sql_dialect !== 'mysql' && sql_dialect !== 'pgsql')
     sql_dialect = 'sqlite';
   this.sql_dialect = sql_dialect;
+};
+
+/**
+ *
+ */
+util.prototype.dateSubtract = function(datetime, amount) {
+  switch(this.sql_dialect) {
+  case 'pgsql':
+    datetime = datetime.toLowerCase() === 'now' ? 'NOW()' : datetime;
+    return sequelize.literal(datetime + ' - ' + amount);
+  case 'mysql':
+    datetime = datetime.toLowerCase() === 'now' ? 'NOW()' : datetime;
+    return sequelize.fn('DATE_SUB', datetime, amount);
+  default: // sqlite
+    return sequelize.fn('date', datetime, sequelize.literal("'-'||" + amount));
+  }
+};
+
+/**
+ *
+ */
+util.prototype.colToMinutes = function(column) {
+  switch(this.sql_dialect) {
+  case 'pgsql':
+    return 'CAST(' + column + " || ' minutes')";
+  case 'mysql':
+    return 'INTERVAL CONVERT(`' + column + '` SIGNED INTEGER) MINUTE)';
+  default: //sqlite
+    return column + "||' minutes'";
+  }
 };
 
 /**

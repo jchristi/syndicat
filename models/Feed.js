@@ -4,7 +4,7 @@ var co = require('co');
 var l = require('lodash');
 var moment = require('moment');
 
-// var ModelUtils = require('./util');
+var ModelUtils = require('./util');
 
 
 // TODO: move these elsewhere!
@@ -15,7 +15,7 @@ var _DAEMON_SLEEP_INTERVAL = 120;
 var tableNamePrefix = 'ttrss_';
 
 module.exports = function(sequelize, DataTypes) {
-  // var model_utils = new ModelUtils(sequelize.options.dialect);
+  var util = new ModelUtils(sequelize.options.dialect);
   var Feed = sequelize.define('Feed', {
 
     //
@@ -266,41 +266,47 @@ module.exports = function(sequelize, DataTypes) {
        */
       updateThresholdExceeded: () => {
         // see: http://stackoverflow.com/questions/17976459/utc-date-in-sequelize-js
-        var interval = 10000; // XXX
-        var _datetime_threshold = Date.now() - interval;
-        var _update_interval = Date.now() - interval; // XXX
-        var user_pref_exists = {
-          model: sequelize.models.UserPreference,
-          where: { value: { $ne: -1 } }
-        };
-        // var col = sequelize.col;
-        // var fn = sequelize.fn;
+        let user_pref_table = sequelize.queryInterface.quoteTable(
+          `User.${sequelize.models.User.associations.UserPreferences.as}`);
+        let user_pref_col = sequelize.queryInterface.quoteIdentifier('value');
+        let user_pref_minutes = util.colToMinutes(`${user_pref_table}.${user_pref_col}`);
         return {
-          $or: [
-            {
-              update_interval: 0,
-              // XXX: can this be done???
-              // ttrss_feeds.last_updated < NOW() - CAST((ttrss_user_prefs.value || ' minutes') \
-              // AS INTERVAL
-              // last_updated: { $lt: datetime_threshold },
-              last_updated: { $lt: '' },
-              include: [ user_pref_exists ]
-            },
-            {
-             // AND ttrss_feeds.last_updated < NOW() - CAST((ttrss_feeds.update_interval || ]
-             // ' minutes') AS INTERVAL)\
-              update_interval: { $lt: 0 }
-              //last_updated: { $lt: update_interval }
-            },
-            {
-              last_updated: null,
-              include: [ user_pref_exists ]
-            },
-            {
-              last_updated: '1970-01-01 00:00:00',
-              include: [ user_pref_exists ]
-            }
-          ]
+          include: [{
+            model: sequelize.models.User,
+            attributes: [],
+            where: { id: sequelize.col('Feed.owner_uid') },
+            include: [{
+              model: sequelize.models.UserPreference,
+              attributes: [],
+              where: {
+                owner_uid: sequelize.col('User.id'),
+                pref_name: 'DEFAULT_UPDATE_INTERVAL', // TODO: add const in UserPreference
+                profile: null
+              }
+            }]
+          }],
+          where: {
+            $or: [
+              {
+                update_interval: 0,
+                last_updated: { $lt: util.dateSubtract('now', user_pref_minutes) },
+                '$User.UserPreferences.value$': { $ne: -1 }
+              },
+              {
+                update_interval: { $gt: 0 },
+                last_updated: { $lt: util.dateSubtract('now', user_pref_minutes) }
+              },
+              {
+                last_updated: null,
+                '$User.UserPreferences.value$': { $ne: -1 }
+              },
+              {
+                last_updated: '1970-01-01 00:00:00',
+                '$User.UserPreferences.value$': { $ne: -1 }
+              }
+            ]
+          },
+          order: [ ['last_updated'] ]
         };
       },
 
@@ -311,10 +317,13 @@ module.exports = function(sequelize, DataTypes) {
        */
       notBeingUpdated: () => {
         return {
-          last_update_started: {
-            $or: {
-              $eq: null,
-              $lt: moment().subtract(10, 'minutes').toDate()
+          where: {
+            last_update_started: {
+              $or: {
+                $eq: null,
+                // TODO: Use timezones properly
+                $lt: moment().subtract(10, 'minutes').toDate()
+              }
             }
           }
         };
@@ -325,22 +334,17 @@ module.exports = function(sequelize, DataTypes) {
        *
        * return feeds that need to be updated
        */
-      needsUpdate: () => {
+      needsUpdate: (limit) => {
         let scopes = sequelize.models.Feed.options.scopes;
         // TODO: consider combining scopes with $and
-        return l.defaultsDeep(
-          { include: [
-            { model: sequelize.models.UserPreference,
-              where: {
-                pref_name: 'DEFAULT_UPDATE_INTERVAL', // TODO: add const in UserPreference cls
-                profile: null
-              }
-            },
-            scopes.ownersRecentlyLoggedIn().include[0]
-          ]},
+        let it = l.defaultsDeep(
+          scopes.ownersRecentlyLoggedIn(),
           scopes.updateThresholdExceeded(),
           scopes.notBeingUpdated()
         );
+        it.order = [ [ 'last_updated' ] ];
+        if (limit) it.limit = limit;
+        return it;
       },
 
       /**
@@ -348,7 +352,6 @@ module.exports = function(sequelize, DataTypes) {
        */
       mostSubscribed: () => {
         /*function(limit, columns) {
-        // TODO: Allow inside a transaction
         limit = (limit !== 'undefined') ? limit : 1000;
         if (typeof columns === 'undefined') {
           columns = ['feed_url', 'site_url', 'title', db.dal.raw('COUNT(id) as subscribers')];

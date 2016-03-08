@@ -89,17 +89,23 @@ describe('Feed', function() {
       });
       it('has props', function(done) {
         let scope = db.Feed.scope('updateThresholdExceeded').$scope;
-        expect(scope).to.have.property('$or');
-        expect(scope.$or.length).to.equal(4);
-        expect(scope.$or[0]).to.have.keys(['update_interval','last_updated','include']);
-        expect(scope.$or[0].update_interval).to.equal(0);
-        expect(scope.$or[1]).to.have.keys(['update_interval']);
-        expect(scope.$or[1].update_interval).to.have.property('$lt');
-        expect(scope.$or[1].update_interval.$lt).to.equal(0);
-        expect(scope.$or[2]).to.have.keys(['last_updated','include']);
-        expect(scope.$or[2].last_updated).to.be.null;
-        expect(scope.$or[3]).to.have.keys(['last_updated','include']);
-        expect(scope.$or[3].last_updated).to.equal('1970-01-01 00:00:00');
+        expect(scope).to.have.deep.property('include[0].model');
+        expect(scope).to.have.deep.property('include[0].include[0].model');
+        expect(scope).to.have.deep.property('include[0].include[0].where.profile', null);
+        expect(scope).to.have.deep.property('include[0].include[0].where.pref_name',
+                                           'DEFAULT_UPDATE_INTERVAL');
+        expect(scope).to.have.deep.property('where.$or');
+        expect(scope.where.$or.length).to.equal(4);
+        expect(scope.where.$or[0]).to.have.property('update_interval', 0);
+        expect(scope.where.$or[0]).to.have.property('last_updated');
+        expect(scope.where.$or[0]).to.have.property('$User.UserPreferences.value$');
+        expect(scope.where.$or[0]['$User.UserPreferences.value$']).to.have.property('$ne', -1);
+        expect(scope.where.$or[1]).to.have.deep.property('update_interval.$gt', 0);
+        expect(scope.where.$or[1]).to.have.property('last_updated');
+        expect(scope.where.$or[2]).to.have.property('last_updated', null);
+        expect(scope.where.$or[2]['$User.UserPreferences.value$']).to.have.property('$ne', -1);
+        expect(scope.where.$or[3].last_updated).to.equal('1970-01-01 00:00:00');
+        expect(scope.where.$or[3]['$User.UserPreferences.value$']).to.have.property('$ne', -1);
         // TODO: there's got to be a better way to test this...
         done();
       });
@@ -111,10 +117,10 @@ describe('Feed', function() {
       });
       it('checks last_update_started is more than 10 minutes ago', function(done) {
         let scope = db.Feed.scope('notBeingUpdated').$scope;
-        expect(scope).to.have.deep.property('last_update_started.$or.$eq');
-        expect(scope).to.have.deep.property('last_update_started.$or.$lt');
-        expect(scope.last_update_started.$or.$eq).to.be.null;
-        expect(scope.last_update_started.$or.$lt).to.be.within(
+        expect(scope).to.have.deep.property('where.last_update_started.$or.$eq', null);
+        expect(scope).to.have.deep.property('where.last_update_started.$or.$lt');
+        // TODO: mock use of moment() in Feed.js
+        expect(scope.where.last_update_started.$or.$lt).to.be.within(
           moment().subtract(11,'minutes').toDate(),
           moment().subtract(9,'minutes').toDate()
         );
@@ -128,14 +134,24 @@ describe('Feed', function() {
       });
       it('has props', function(done) {
         let scope = db.Feed.scope('needsUpdate').$scope;
-        // console.log(scope);
-        expect(scope).to.have.keys(['include','$or','last_update_started']);
-        expect(scope.include).to.have.length(2);
-        expect(scope.include[0]).to.have.property('where');
-        expect(scope.include[0].where).to.have.keys(['pref_name','profile']);
-        expect(scope.include[0].where.pref_name).to.equal('DEFAULT_UPDATE_INTERVAL');
-        expect(scope.include[0].where.profile).to.be.null;
-        expect(scope.include[1]).to.have.deep.property('where.last_login.$gte');
+        // console.log(require('util').inspect(scope, { depth:10 }));
+        expect(scope).to.have.keys(['include','where','order']);
+        expect(scope).to.have.deep.property('include[0].where.last_login.$gte');
+        expect(scope).to.have.deep.property('include[0].include[0].where.pref_name',
+                                            'DEFAULT_UPDATE_INTERVAL');
+        expect(scope).to.have.deep.property('include[0].include[0].where.profile', null);
+        expect(scope).to.have.deep.property('where.$or[0].update_interval', 0);
+        expect(scope).to.have.deep.property('where.$or[0].last_updated.$lt');
+        expect(scope.where.$or[0]['$User.UserPreferences.value$']).to.have.property('$ne', -1);
+        expect(scope).to.have.deep.property('where.$or[1].update_interval.$gt', 0);
+        expect(scope).to.have.deep.property('where.$or[1].last_updated.$lt');
+        expect(scope).to.have.deep.property('where.$or[2].last_updated', null);
+        expect(scope.where.$or[2]['$User.UserPreferences.value$']).to.have.property('$ne', -1);
+        expect(scope).to.have.deep.property('where.$or[3].last_updated', '1970-01-01 00:00:00');
+        expect(scope.where.$or[3]['$User.UserPreferences.value$']).to.have.property('$ne', -1);
+        expect(scope).to.have.deep.property('where.last_update_started.$or.$eq', null);
+        expect(scope).to.have.deep.property('where.last_update_started.$or.$lt');
+        expect(scope).to.have.deep.property('order[0][0]', 'last_updated');
         done();
       });
 

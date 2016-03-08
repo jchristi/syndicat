@@ -9,6 +9,8 @@ var Promise         = Sequelize.Promise;
 var crypto          = Promise.promisifyAll(require('crypto'));
 var fs              = Promise.promisifyAll(require('fs'));
 var models          = require('../models');
+var ModelUtils      = require('../models/util');
+
 
 chai.use(chaiAsPromised);
 
@@ -18,6 +20,7 @@ global.chai = chai;
 global.expect = chai.expect;
 global.chaiAsPromised = chaiAsPromised;
 global.fs = fs;
+global.ModelUtils = ModelUtils;
 
 
 /**

@@ -13,6 +13,7 @@
       "fs": false,
       "getTestDB": false,
       "createTestModel": false,
-      "crypto": false
+      "crypto": false,
+      "ModelUtils": false
     }
 }
