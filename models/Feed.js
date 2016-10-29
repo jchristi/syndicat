@@ -342,7 +342,6 @@ module.exports = function(sequelize, DataTypes) {
           scopes.updateThresholdExceeded(),
           scopes.notBeingUpdated()
         );
-        it.order = [ [ 'last_updated' ] ];
         if (limit) it.limit = limit;
         return it;
       },
@@ -388,6 +387,25 @@ module.exports = function(sequelize, DataTypes) {
     //
 
     instanceMethods: {
+
+      /**
+       *
+       */
+      update_daemon_common: co.wrap(function* () {
+        let results = yield sequelize.Feed.scope('needsUpdate').fetchAll();
+
+        // magic to prevent double updating of feeds? (todo: use locks or something)
+
+        // mark feed as updated, so it doesn't get double updated
+        // db_query(sprintf("UPDATE ttrss_feeds SET last_update_started = NOW()
+        // WHERE feed_url IN (%s)", implode(',', $feeds_quoted)));
+
+        // for each feed, update
+        // since we have the data cached, we can deal with other feeds with the same url
+        // update_rss_feed($tline["id"], true, false);
+
+        results;
+      }),
 
       /**
        * This is usually run when a feed is initially created

@@ -9,10 +9,11 @@ Currently no working installation.
 A few features that *may* be implemented in the future:
 
 * full article fetching
-* embedded [spritzing](http://spritzinc.com/) for fast, easy article reading. 
-  Doesn't work well for articles with tables or images (See also: [Glance](https://github.com/Miserlou/Glance), 
+* embedded [spritzing](http://spritzinc.com/) for fast, easy article reading.
+  Doesn't work well for articles with tables or images (See also: [Glance](https://github.com/Miserlou/Glance),
   [Squirt](https://github.com/cameron/squirt))
 * Pluggable feed entry exporters (ie. "send to" / "share")
-  
+* Feed aggregator+filter: http://dai-shi.github.io/rss-pipes/
+
 ## Contributing
 Contributions welcome. Please include mocha tests with all PRs.
