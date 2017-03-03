@@ -10,16 +10,12 @@ describe('Feed', function() {
     db = yield getTestDB();
     ctx = {};
   }));
-  afterEach('delete db and ctx', function(done){
-    db.sequelize.close();
-    db = null;
-    ctx = {};
-    done();
-  });
 
-  describe('associations', function() {
+  describe.only('associations', function() {
     beforeEach('import models', co.wrap(function* (){
+      console.time('importmodels');
       let _result = yield db.loadModels(['Feed']);
+      console.timeEnd('importmodels');
     }));
     it('has User property', function(done) {
       expect(db.Feed.associations).to.have.property('User');

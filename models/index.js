@@ -18,29 +18,36 @@ function DB(sequelize) {
   this.models_imported = [];
   this.models_synced = [];
   this.log = console.log;
-  this.log = () => {};
+  // this.log = () => {};
 }
 
 // load models
 DB.prototype.loadModels = co.wrap(function* (model_names) {
+  console.time('loadModels');
   let models_imported = this.importModels(model_names);
   this.associateAllModels();
   let models_synced = yield this.syncAllModels();
-  return l.intersection(models_imported, models_synced);
+  let r = l.intersection(models_imported, models_synced);
+  console.timeEnd('loadModels');
+  return r;
 });
 
 // load all models
 DB.prototype.loadAllModels = co.wrap(function* () {
+  console.time('loadAllModels');
   let models_imported = yield this.importAllModels();
   this.associateAllModels();
   let models_synced = yield this.syncAllModels();
-  return l.intersection(models_imported, models_synced);
+  let r = l.intersection(models_imported, models_synced);
+  console.timeEnd('loadAllModels');
+  return r;
 });
 
 // import models
 DB.prototype.importModels = function(model_names) {
   // don't load the same model twice
   // model_names = model_names - this.models_imported;
+  console.time('importModels');
   model_names = model_names.filter(model_name => {
     return !l.includes(this.models_imported, model_name);
   });
@@ -57,11 +64,13 @@ DB.prototype.importModels = function(model_names) {
     this.models_imported = l.union(this.models_imported, [model_name]);
   });
 
+  console.timeEnd('importModels');
   return models_imported;
 };
 
 // import all models
 DB.prototype.importAllModels = co.wrap(function* () {
+  console.time('importAllModels');
   let filenames = yield fs.readdirAsync(this.model_dir);
 
   // get list of model filenames
@@ -82,11 +91,13 @@ DB.prototype.importAllModels = co.wrap(function* () {
     this.models_imported = l.union(this.models_imported, [model.name]);
   });
 
+  console.timeEnd('importAllModels');
   return models_imported;
 });
 
 // run associations on all imported models
 DB.prototype.associateAllModels = function() {
+  console.time('associateAllModels');
   var models_associated = [];
   this.models_imported.forEach(model_name => {
     if ('associate' in this[model_name] &&
@@ -100,11 +111,13 @@ DB.prototype.associateAllModels = function() {
       this[model_name].addScopes(this);
     }
   });
+  console.timeEnd('associateAllModels');
   return models_associated;
 };
 
 // Sync models
 DB.prototype.syncModels = co.wrap(function* (model_names) {
+  console.time('syncModels');
   let _result = yield this.sequelize.sync();
   var self = this;
   model_names.forEach(co.wrap(function* (model_name) {
@@ -116,6 +129,7 @@ DB.prototype.syncModels = co.wrap(function* (model_names) {
     }
   }));
   // _result = yield sequelize.sync();
+  console.timeEnd('syncModels');
   return this.models_synced;
 });
 
@@ -152,10 +166,9 @@ module.exports.getDB = co.wrap(function* (sequelize) {
     created = true;
   }
   let db = new DB(sequelize);
-  if (created) {
+  // if (created) {
     let _models_imported = yield db.importAllModels();
     db.associateAllModels();
-    return db;
-  }
+  // }
   return Promise.resolve(db);
 });

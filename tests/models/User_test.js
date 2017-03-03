@@ -7,8 +7,8 @@ describe('User', function() {
   describe('associations', function() {
     beforeEach('get models', co.wrap(function* () {
       db = yield getTestDB();
-      let _result = yield db.importModels(['User']);
-      _result = yield db.associateAllModels();
+      // let _result = yield db.importModels(['User']);
+      // _result = yield db.associateAllModels();
     }));
     it('has Feeds property', function(done) {
       expect(db.User.associations).to.have.property('Feeds');

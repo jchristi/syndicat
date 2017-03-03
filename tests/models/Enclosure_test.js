@@ -23,9 +23,9 @@ describe('Enclosure', function() {
       _result = yield db.syncAllModels();
       // create Entry and Enclosure
     }));
-    it('has Entry property', co.wrap(function* () {
-      // let key = yield db.Enclosure.findOne({ id: 2, include: [ db.Entry ]});
-    }));
+    // it('has Entry property', co.wrap(function* () {
+    //   // let key = yield db.Enclosure.findOne({ id: 2, include: [ db.Entry ]});
+    // }));
   });
 
 });

@@ -32,10 +32,10 @@ describe('ArchivedFeed', function() {
       let afeed = yield db.ArchivedFeed.findOne({ id: 2, include: [ db.User ]});
       expect(afeed).to.have.property('User');
     }));
-    it('has UserEntries property', co.wrap(function* () {
+    //it('has UserEntries property', co.wrap(function* () {
       // let afeed = yield db.ArchivedFeed.findOne({ id: 2, attributes: ['id'],
         // include:
-    }));
+    //}));
   });
 
 });

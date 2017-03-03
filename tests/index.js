@@ -27,6 +27,7 @@ global.ModelUtils = ModelUtils;
  * model factory
  */
 var createTestModel = co.wrap(function* (model_name, attrs) {
+  console.time('createTestModel');
   attrs = (attrs == null) ? {} : attrs;
   let _loaded_models = yield this.loadModels([model_name]);
   let model = this[model_name];
@@ -39,12 +40,14 @@ var createTestModel = co.wrap(function* (model_name, attrs) {
     if (l.has(attr, 'type._unsigned')) {
       attrs[key] = Math.floor(Math.random() * (99999) + 1);
     } else {
-    // random string
-      let hash = crypto.randomBytes(14);
-      attrs[key] = hash.toString('hex').substr(0,8);
+      // random string
+      //let hash = crypto.randomBytes(14);
+      attrs[key] = 'asdfdsa'; //hash.toString('hex').substr(0,8);
     }
   });
-  return yield model.create(attrs);
+  let r = yield model.create(attrs);
+  console.timeEnd('createTestModel');
+  return r;
 });
 
 
@@ -54,21 +57,26 @@ var createTestModel = co.wrap(function* (model_name, attrs) {
 global.getTestDB = co.wrap(function* () {
   // let _logging = console.log;
   let _logging = null;
-  let hash = yield crypto.randomBytesAsync(15);
-  let name = 'test-' + hash.toString('base64').substr(0, 14);
+  // let hash = yield crypto.randomBytesAsync(15);
+  let name = 'test-' //+ hash.toString('base64').substr(0, 14);
   let sequelize = new Sequelize(name, 'username', 'password', {
     host: 'localhost',
     dialect: 'sqlite',
     storage: ':memory:',
-    pool: null,
+    pool: null /* {
+      max: 1,
+      min: 1,
+      idle: 1
+    }*/,
     // typeValidation: true,
-    logging: null, // TODO: output to log file
+    logging: null, //console.log, // TODO: output to log file
+    benchmark: true,
     define: {
       timestamps: false,
       underscored: true
     }
   });
-  let _result = yield sequelize.query('PRAGMA journal_mode=MEMORY');
+  // let _result = yield sequelize.query('PRAGMA journal_mode=MEMORY');
   let db = yield models.getDB(sequelize);
   db.createTestModel = createTestModel;
   return db;
