@@ -13,7 +13,9 @@
       "fs": false,
       "getTestDB": false,
       "createTestModel": false,
-      "crypto": false,
       "ModelUtils": false
+    },
+    "rules": {
+      "no-unused-vars": "off"
     }
 }
