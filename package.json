@@ -17,7 +17,7 @@
     "reader"
   ],
   "author": "Jeremy Christian",
-  "license": "GPL-3.0",
+  "license": "AGPL-3.0",
   "dependencies": {
     "co": "^4.6.0",
     "feedparser": "^1.1.4",

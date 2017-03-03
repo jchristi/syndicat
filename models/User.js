@@ -94,41 +94,6 @@ module.exports = function(sequelize, DataTypes) {
 
     classMethods: {
 
-      /**
-       * method used to declare all model associations
-       * @param {Object} models
-       */
-      associate: function(models) {
-        models.importModels([
-          'Feed',
-          'FeedCategory',
-          'ArchivedFeed',
-          'AccessKey',
-          'EntryComment',
-          'ErrorLog',
-          'Filter2',
-          'Label',
-          'PluginStorage',
-          'Profile',
-          'Tag',
-          'UserEntry',
-          'UserPreference'
-        ]);
-        User.hasMany(models.Feed, { foreignKey: 'owner_uid' });
-        User.hasMany(models.FeedCategory, { foreignKey: 'owner_uid' });
-        User.hasMany(models.ArchivedFeed, { foreignKey: 'owner_uid' });
-        User.hasMany(models.AccessKey, { foreignKey: 'owner_uid' });
-        User.hasMany(models.EntryComment, { foreignKey: 'owner_uid' });
-        User.hasMany(models.ErrorLog, { foreignKey: 'owner_uid' });
-        User.hasMany(models.Filter2, { foreignKey: 'owner_uid' });
-        User.hasMany(models.Label, { foreignKey: 'owner_uid' });
-        User.hasMany(models.PluginStorage, { foreignKey: 'owner_uid' });
-        User.hasMany(models.Profile, { foreignKey: 'owner_uid' }); // TODO: hasMany or hasOne?
-        User.hasMany(models.Tag, { foreignKey: 'owner_uid' });
-        User.hasMany(models.UserEntry, { foreignKey: 'owner_uid' }); // TODO: as 'UserEntries' ?
-        User.hasMany(models.UserPreference, { foreignKey: 'owner_uid' });
-      }
-
     } // end static methods
 
   });
