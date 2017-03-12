@@ -7,7 +7,6 @@ var tableNamePrefix = 'ttrss_';
 var tableName = tableNamePrefix + 'feeds';
 
 module.exports = function(sequelize, DataTypes) {
-  var util = new ModelUtils(sequelize.options.dialect);
   var Feed = sequelize.define('Feed', {
 
     //
