@@ -1,11 +1,13 @@
 'use strict';
 
-// Should this be in some parent scope somehow?
-var tableNamePrefix = 'ttrss_';
 
-// Oh yeah, that should def be in some parent scope somehow.
-var tableName = tableNamePrefix + 'feeds';
-
+/**
+ * Feed
+ *
+ * Feeds are a representation of a site stored in Syndicat.  
+ * Multiple users can have the same feed, but will have different 
+ * FeedEntries for each.  
+ */ 
 module.exports = function(sequelize, DataTypes) {
   var Feed = sequelize.define('Feed', {
 
@@ -85,7 +87,7 @@ module.exports = function(sequelize, DataTypes) {
     // Options
     //
 
-    tableName: tableNamePrefix + 'feeds',
+    tableName: 'ttrss_feeds',
 
 
     //
