@@ -80,8 +80,109 @@ module.exports = function(sequelize, DataTypes) {
     parent_feed: {
       type: DataTypes.INTEGER(11),
       allowNull: true
+    },
+    private: {
+      type: DataTypes.BOOLEAN,
+      allowNull: false,
+      defaultValue: '0'
+    },
+    rtl_content: {
+      type: DataTypes.BOOLEAN,
+      allowNull: false,
+      defaultValue: '0'
+    },
+    hidden: {
+      type: DataTypes.BOOLEAN,
+      allowNull: false,
+      defaultValue: '0'
+    },
+    include_in_digest: {
+      type: DataTypes.BOOLEAN,
+      allowNull: false,
+      defaultValue: '1'
+    },
+    cache_images: {
+      type: DataTypes.BOOLEAN,
+      allowNull: false,
+      defaultValue: '0'
+    },
+    hide_images: {
+      type: DataTypes.BOOLEAN,
+      allowNull: false,
+      defaultValue: '0'
+    },
+    cache_content: {
+      type: DataTypes.BOOLEAN,
+      allowNull: false,
+      defaultValue: '0'
+    },
+    auth_pass_encrypted: {
+      type: DataTypes.BOOLEAN,
+      allowNull: false,
+      defaultValue: '0'
+    },
+    last_viewed: {
+      type: DataTypes.DATE,
+      allowNull: true
+    },
+    last_update_started: {
+      type: DataTypes.DATE,
+      allowNull: true
+    },
+    always_display_enclosures: {
+      type: DataTypes.BOOLEAN,
+      allowNull: false,
+      defaultValue: '0'
+    },
+    update_method: {
+      type: DataTypes.INTEGER(11),
+      allowNull: false,
+      defaultValue: '0'
+    },
+    order_id: {
+      type: DataTypes.INTEGER(11),
+      allowNull: false,
+      defaultValue: '0'
+    },
+    mark_unread_on_update: {
+      type: DataTypes.BOOLEAN,
+      allowNull: false,
+      defaultValue: '0'
+    },
+    update_on_checksum_change: {
+      type: DataTypes.BOOLEAN,
+      allowNull: false,
+      defaultValue: '0'
+    },
+    strip_images: {
+      type: DataTypes.BOOLEAN,
+      allowNull: false,
+      defaultValue: '0'
+    },
+    view_settings: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      defaultValue: ''
+    },
+    pubsub_state: {
+      type: DataTypes.INTEGER(11),
+      allowNull: false,
+      defaultValue: '0'
+    },
+    favicon_last_checked: {
+      type: DataTypes.DATE,
+      allowNull: true
+    },
+    favicon_avg_color: {
+      type: DataTypes.STRING,
+      allowNull: true
+    },
+    feed_language: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      defaultValue: ''
     }
-  }, {
+  },{
 
     //
     // Options
