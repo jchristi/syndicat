@@ -34,12 +34,12 @@ global.getTestDB = co.wrap(function* () {
                   idle: 1
                   }*/,
       // typeValidation: true,
-      logging: null, //console.log, // TODO: output to log file
+    logging: null, //console.log, // TODO: output to log file
     //benchmark: true,
-      define: {
-        timestamps: false,
-        underscored: true
-      }
+    define: {
+      timestamps: false,
+      underscored: true
+    }
   });
   yield sequelize.query('PRAGMA journal_mode=MEMORY');
   let models = require('../../models')(sequelize);
