@@ -30,17 +30,17 @@ global.getTestDB = co.wrap(function* () {
     dialect: 'sqlite',
     storage: ':memory:',
     pool: null /* {
-      max: 1,
-      min: 1,
-      idle: 1
-    }*/,
-    // typeValidation: true,
-    logging: null, //console.log, // TODO: output to log file
+                  max: 1,
+                  min: 1,
+                  idle: 1
+                  }*/,
+      // typeValidation: true,
+      logging: null, //console.log, // TODO: output to log file
     //benchmark: true,
-    define: {
-      timestamps: false,
-      underscored: true
-    }
+      define: {
+        timestamps: false,
+        underscored: true
+      }
   });
   yield sequelize.query('PRAGMA journal_mode=MEMORY');
   let models = require('../../models')(sequelize);
@@ -91,4 +91,53 @@ describe('FeedCategory', function() {
       expect(key.id).to.equal(i);
     }
   }));
+
+  describe('validations', function() {
+    it('is invalid without a user', co.wrap(function* (done) {
+      let sequelize = yield getTestDB();
+      let models = sequelize.models;
+      let db = getTestDB();
+
+      var sequelizeValidationErrorThrown = false;
+      try{
+        let key1 = yield models.FeedCategory.create({
+          id: 1,
+          title: 'Test Title'
+        });
+      } catch( e ) {
+        if ( e.name == "SequelizeValidationError" && e.message == "notNull Violation: owner_uid cannot be null")
+            sequelizeValidationErrorThrown = true;
+      }
+
+      expect(sequelizeValidationErrorThrown).to.equal(true);
+      // done(); We don't need done because we called to.equal?
+    }));
+
+    it('is invalid without a title', co.wrap(function* (done) {
+      let sequelize = yield getTestDB();
+      let models = sequelize.models;
+      let db = getTestDB();
+
+      var sequelizeValidationErrorThrown = false;
+      try{
+
+        let usr1 = yield models.User.create({
+          id: 1,
+          login: 'sdfasd',
+          pwd_hash: 'sdfads'
+        });
+
+        let key1 = yield models.FeedCategory.create({
+          id: 1,
+          owner_uid: 1
+        });
+      } catch( e ) {
+        if ( e.name == "SequelizeValidationError" && e.message == "notNull Violation: title cannot be null")
+            sequelizeValidationErrorThrown = true;
+      }
+
+      expect(sequelizeValidationErrorThrown).to.equal(true);
+    }));
+
+  });
 });
