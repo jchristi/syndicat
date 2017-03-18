@@ -96,3 +96,20 @@ describe('Feed', function(){
         }
     }));
 });
+
+describe('Missing Value', function(){
+	it('100 models', co.wrap(function* (){
+		
+	}));	
+});
+
+
+
+
+
+
+
+
+
+
+
