@@ -35,12 +35,12 @@ global.getTestDB = co.wrap(function* () {
                   idle: 1
                   }*/,
       // typeValidation: true,
-      logging: null, //console.log, // TODO: output to log file
+    logging: null, //console.log, // TODO: output to log file
     //benchmark: true,
-      define: {
-        timestamps: false,
-        underscored: true
-      }
+    define: {
+      timestamps: false,
+      underscored: true
+    }
   });
   yield sequelize.query('PRAGMA journal_mode=MEMORY');
   let models = require('../../models')(sequelize);
@@ -106,11 +106,10 @@ describe('FeedCategory', function() {
         });
       } catch( e ) {
         if ( e.name == "SequelizeValidationError" && e.message == "notNull Violation: owner_uid cannot be null")
-            sequelizeValidationErrorThrown = true;
+          sequelizeValidationErrorThrown = true;
       }
 
       expect(sequelizeValidationErrorThrown).to.equal(true);
-      // done(); We don't need done because we called to.equal?
     }));
 
     it('is invalid without a title', co.wrap(function* (done) {
@@ -133,7 +132,7 @@ describe('FeedCategory', function() {
         });
       } catch( e ) {
         if ( e.name == "SequelizeValidationError" && e.message == "notNull Violation: title cannot be null")
-            sequelizeValidationErrorThrown = true;
+          sequelizeValidationErrorThrown = true;
       }
 
       expect(sequelizeValidationErrorThrown).to.equal(true);
