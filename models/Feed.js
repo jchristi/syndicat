@@ -201,7 +201,7 @@ module.exports = function(sequelize, DataTypes) {
        * method used to declare all model associations
        * @param {Object} models
        */
-    }, // end class methods
+    } // end class methods
   });
 
   return Feed;
