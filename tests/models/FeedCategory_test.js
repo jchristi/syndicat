@@ -70,16 +70,14 @@ describe('FeedCategory', function() {
   }));
 
   describe('associations', function() {
-    it('has User property', co.wrap(function* (done){
+    it('has User property', co.wrap(function* (){
       let sequelize = yield getTestDB();
-      console.log('debugging');
-      console.info(sequelize.models.FeedCategory.associations);
       expect(sequelize.models.FeedCategory.associations).to.have.property('User');
     }));
   });
 
   describe('invalid states validation', function() {
-    it('is invalid without a title', co.wrap(function* (done) {
+    it('is invalid without a title', co.wrap(function* () {
       let sequelize = yield getTestDB();
       let models = sequelize.models;
 
