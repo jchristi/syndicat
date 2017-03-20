@@ -44,7 +44,7 @@ module.exports = function(sequelize, DataTypes) {
     no_orig_date: {
       type: DataTypes.BOOLEAN,
       allowNull: false,
-      defaultValue: '0'
+      defaultValue: false
     },
     date_entered: {
       type: DataTypes.DATE,
@@ -57,7 +57,7 @@ module.exports = function(sequelize, DataTypes) {
     num_comments: {
       type: DataTypes.INTEGER(11),
       allowNull: false,
-      defaultValue: '0'
+      defaultValue: 0
     },
     plugin_data: {
       type: DataTypes.TEXT,
