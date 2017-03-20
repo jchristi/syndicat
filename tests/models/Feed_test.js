@@ -106,7 +106,7 @@ describe('Feeds', function(){
   }));
   it('saves and extracts successfully', co.wrap(function* (){
   	let sequelize = yield getTestDB();
-    let feed = sequelize.models.Feed;
+    let Feed = sequelize.models.Feed;
     yield Feed.sync({force: true});
 
     let insert = yield getFeed();
@@ -397,6 +397,114 @@ describe('Feeds', function(){
     let retrieve = yield Feed.findById(insert.id);
 
     expect(retrieve.auth_pass_encrypted).to.equal(0);
+  }));
+  it('When always_display_enclosures not present default to 0', co.wrap(function* () {
+    let sequelize = yield getTestDB();
+    let Feed = sequelize.models.Feed;
+    yield Feed.sync({force: true});
+
+    let insert = yield getFeed();
+    yield Feed.create(insert);
+
+    let retrieve = yield Feed.findById(insert.id);
+
+    expect(retrieve.always_display_enclosures).to.equal(0);
+  }));
+  it('When update_method not present default to 0', co.wrap(function* () {
+    let sequelize = yield getTestDB();
+    let Feed = sequelize.models.Feed;
+    yield Feed.sync({force: true});
+
+    let insert = yield getFeed();
+    yield Feed.create(insert);
+
+    let retrieve = yield Feed.findById(insert.id);
+
+    expect(retrieve.update_method).to.equal(0);
+  }));
+  it('When order_id not present default to 0', co.wrap(function* () {
+    let sequelize = yield getTestDB();
+    let Feed = sequelize.models.Feed;
+    yield Feed.sync({force: true});
+
+    let insert = yield getFeed();
+    yield Feed.create(insert);
+
+    let retrieve = yield Feed.findById(insert.id);
+
+    expect(retrieve.order_id).to.equal(0);
+  }));
+  it('When mark_unread_on_update not present default to 0', co.wrap(function* () {
+    let sequelize = yield getTestDB();
+    let Feed = sequelize.models.Feed;
+    yield Feed.sync({force: true});
+
+    let insert = yield getFeed();
+    yield Feed.create(insert);
+
+    let retrieve = yield Feed.findById(insert.id);
+
+    expect(retrieve.mark_unread_on_update).to.equal(0);
+  }));
+  it('When update_on_checksum_change not present default to 0', co.wrap(function* () {
+    let sequelize = yield getTestDB();
+    let Feed = sequelize.models.Feed;
+    yield Feed.sync({force: true});
+
+    let insert = yield getFeed();
+    yield Feed.create(insert);
+
+    let retrieve = yield Feed.findById(insert.id);
+
+    expect(retrieve.update_on_checksum_change).to.equal(0);
+  }));
+  it('When strip_images not present default to 0', co.wrap(function* () {
+    let sequelize = yield getTestDB();
+    let Feed = sequelize.models.Feed;
+    yield Feed.sync({force: true});
+
+    let insert = yield getFeed();
+    yield Feed.create(insert);
+
+    let retrieve = yield Feed.findById(insert.id);
+
+    expect(retrieve.strip_images).to.equal(0);
+  }));
+  it('When view_setting not present default to empty string', co.wrap(function* () {
+    let sequelize = yield getTestDB();
+    let Feed = sequelize.models.Feed;
+    yield Feed.sync({force: true});
+
+    let insert = yield getFeed();
+    yield Feed.create(insert);
+
+    let retrieve = yield Feed.findById(insert.id);
+
+    expect(retrieve.view_setting).to.equal('');
+  }));
+  it('When pubsub_state not present default to 0', co.wrap(function* () {
+    let sequelize = yield getTestDB();
+    let Feed = sequelize.models.Feed;
+    yield Feed.sync({force: true});
+
+    let insert = yield getFeed();
+    yield Feed.create(insert);
+
+    let retrieve = yield Feed.findById(insert.id);
+
+    expect(retrieve.pubsub_state).to.equal(0);
+  }));
+  it('When feed_language not present default to empty string', co.wrap(function* () {
+    let sequelize = yield getTestDB();
+    let Feed = sequelize.models.Feed;
+    yield Feed.sync({force: true});
+
+    let insert = yield getFeed();
+    yield Feed.create(insert);
+
+    let retrieve = yield Feed.findById(insert.id);
+
+    expect(retrieve.feed_language).to.equal('');
   }));
 });
 
