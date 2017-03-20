@@ -46,7 +46,7 @@ global.getTestDB = co.wrap(function* () {
   return sequelize;
 });
 
-describe('Feed', function(){
+describe('Feed User Association', function(){
   it('100 models', co.wrap(function* (){
     for(let i = 1; i < 100; i++){
       let sequelize = yield getTestDB();
@@ -98,9 +98,126 @@ describe('Feed', function(){
 });
 
 describe('Missing Value', function(){
-	it('100 models', co.wrap(function* (){
-		
+	it('1 model', co.wrap(function* (){
+		let sequelize = yield getTestDB();
+      	let models = sequelize.models;
+		var fn = function(){
+			models.Feed.create({
+		        id: 1,
+		        owner_uid: 1,
+		        title: 'test title',
+		        feed_url: 'google.com',
+		        icon_url: 'google.com',
+		        update_interval: 1000000
+      		});
+		}
+		expect(fn).to.throw(/site_url cannot be null/);
+	}));
+	it('1 model', co.wrap(function* (){
+		let sequelize = yield getTestDB();
+      	let models = sequelize.models;
+		var fn = function(){
+			models.Feed.create({
+		        owner_uid: 1,
+		        title: 'test title',
+		        feed_url: 'google.com',
+		        icon_url: 'google.com',
+		        update_interval: 1000000,
+		        site_url: 'google.com'
+      		});
+		}
+		expect(fn).to.throw(/id cannot be null/);
+	}));
+	it('1 model', co.wrap(function* (){
+		let sequelize = yield getTestDB();
+      	let models = sequelize.models;
+		var fn = function(){
+			models.Feed.create({
+				id: 1,
+		        title: 'test title',
+		        feed_url: 'google.com',
+		        icon_url: 'google.com',
+		        update_interval: 1000000,
+		        site_url: 'google.com'
+      		});
+		}
+		expect(fn).to.throw(/owner_id cannot be null/);
 	}));	
+	it('1 model', co.wrap(function* (){
+		let sequelize = yield getTestDB();
+      	let models = sequelize.models;
+		var fn = function(){
+			models.Feed.create({
+		        id: 1,
+		        owner_uid: 1,
+		     	feed_url: 'google.com',
+		        icon_url: 'google.com',
+		        update_interval: 1000000,
+		        site_url: 'google.com'
+      		});
+		}
+		expect(fn).to.throw(/title cannot be null/);
+	}));
+	it('1 model', co.wrap(function* (){
+		let sequelize = yield getTestDB();
+      	let models = sequelize.models;
+		var fn = function(){
+			models.Feed.create({
+		        id: 1,
+		        owner_uid: 1,
+		        title: 'test title',
+		        icon_url: 'google.com',
+		        update_interval: 1000000,
+		        site_url: 'google.com'
+      		});
+		}
+		expect(fn).to.throw(/feed_url cannot be null/);
+	}));
+	it('1 model', co.wrap(function* (){
+		let sequelize = yield getTestDB();
+      	let models = sequelize.models;
+		var fn = function(){
+			models.Feed.create({
+		        id: 1,
+		        owner_uid: 1,
+		        title: 'test title',
+		        feed_url: 'google.com',
+		        update_interval: 1000000,
+		        site_url: 'google.com'
+      		});
+		}
+		expect(fn).to.throw(/icon_url cannot be null/);
+	}));
+	it('1 model', co.wrap(function* (){
+		let sequelize = yield getTestDB();
+      	let models = sequelize.models;
+		var fn = function(){
+			models.Feed.create({
+		        id: 1,
+		        owner_uid: 1,
+		        title: 'test title',
+		        feed_url: 'google.com',
+		        icon_url: 'google.com',
+		        site_url: 'google.com'
+      		});
+		}
+		expect(fn).to.throw(/update_interval cannot be null/);
+	}));
+});
+
+describe('associations', function(){
+	it('1 model', co.wrap(function* (){
+		let sequelize = yield getTestDB();
+ 		let _feed = yield sequelize.loadModels(['Feed']);
+		it('has FeedCategory property', function(done){
+			expect(sequelize.Feed.associations).to.have.property('FeedCategory');
+			done();
+		});
+		it('has Entry property', function(done){
+			expect(sequelize.Feed.associations).to.have.property('Entry');
+			done();
+		});      		
+	}));
 });
 
 
