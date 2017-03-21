@@ -65,19 +65,6 @@ module.exports = function(sequelize, DataTypes) {
 
     classMethods: {
 
-      /**
-       * method used to declare all model associations
-       * @param {Object} models
-       */
-      associate: function(models) {
-        models.importModels([ 'Feed', 'User' ]);
-        AccessKey.belongsTo(models.Feed, {
-          //onDelete: "CASCADE",
-          foreignKey: 'feed_id'/*{ allowNull: false }*/
-        });
-        AccessKey.belongsTo(models.User, { foreignKey: 'owner_uid' });
-      }
-
     } // end static methods
 
   });
