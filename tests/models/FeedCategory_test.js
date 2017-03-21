@@ -26,6 +26,11 @@ describe('FeedCategory', function() {
       let sequelize = yield getTestDB();
       expect(sequelize.models.FeedCategory.associations).to.have.property('User');
     }));
+
+    it('has a FedCategory (parent) property', co.wrap(function* (){
+      let sequelize = yield getTestDB();
+      expect(sequelize.models.FeedCategory.associations).to.have.property('FeedCategory');
+    }));
   });
 
   describe('invalid states validation', function() {
