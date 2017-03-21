@@ -7,6 +7,7 @@ var chaiAsPromised  = require('chai-as-promised');
 var Sequelize       = require('sequelize');
 var Promise         = Sequelize.Promise;
 var fs              = Promise.promisifyAll(require('fs'));
+var assert          = require('chai').assert;
 // var models          = require('../models');
 
 
@@ -46,14 +47,22 @@ global.getTestDB = co.wrap(function* () {
   return sequelize;
 });
 
-global.getFeed = co.wrap(function* (){
-	return{
+global.getUser = function(){
+  return {
+    id: 1,
+    login: 'sdfasd',
+    pwd_hash: 'sdfads'
+  };
+}
+
+global.getFeed = function(){
+  return {
 		id: 1,
 		owner_uid: 1,
 		title: 'Test Feed',
 		feed_url: 'Test Feed'
 	};
-});
+}
 
 
 describe('Feeds', function(){
@@ -104,64 +113,58 @@ describe('Feeds', function(){
       expect(feed.id).to.equal(i);
     }
   }));
-  it('saves and extracts successfully', co.wrap(function* (){
-  	let sequelize = yield getTestDB();
-    let Feed = sequelize.models.Feed;
-    yield Feed.sync({force: true});
 
-    let insert = yield getFeed();
-    yield Feed.create(insert);
-
-    let retrieve = yield Feed.findById('1');
-
-    expect(retrieve.id).to.equal(insert.id);
-    expect(retrieve.owner_uid).to.equal(insert.owner_uid);
-    expect(retrieve.title).to.equal(insert.title);
-    expect(retrieve.feed_url).to.equal(insert.feed_url);
-    expect(retrieve.icon_url).to.equal(insert.icon_url);
-    expect(retrieve.update_interval).to.equal(insert.update_interval);
-    expect(retrieve.site_url).to.equal(insert.site_url);
-  }));
   it('Auto increments on id', co.wrap(function* () {
     let sequelize = yield getTestDB();
+    let models = sequelize.models;
     let Feed = sequelize.models.Feed;
-    yield Feed.sync({force: true});
-
-    let insert1 = yield getFeed();
-    let insert2 = yield getFeed();
-    delete(insert1.id);
-    delete(insert2.id);
-    yield Feed.create(insert1);
-    yield Feed.create(insert2);
+    
+    let user1 = yield models.User.create({
+        id: 1,
+        login: 'sdfasd',
+        pwd_hash: 'sdfads'
+      });
+    let feed1 = yield getFeed();
+    let feed2 = yield getFeed();
+    delete(feed1.id);
+    delete(feed2.id);
+    yield Feed.create(feed1);
+    yield Feed.create(feed2);
 
     let retrieve = yield Feed.findAll();
     expect(retrieve).to.have.lengthOf(2);
     expect(retrieve[1].id).to.equal(retrieve[0].id + 1);
   }));
+
   it('Requires id to be an integer', co.wrap(function* () {
     let sequelize = yield getTestDB();
     let Feed = sequelize.models.Feed;
-    yield Feed.sync({force: true});
-
-    let insert = yield getFeed();
-    insert.id = 'STRING';
-
+    let models = sequelize.models;
+    let usr1 = yield models.User.create({
+      id: 1,
+      login: 'sdfasd',
+      pwd_hash: 'sdfads'
+    });
+    let feed1 = yield getFeed();
+    feed1.id = 'String';
     let success = false;
-    yield Feed.create(insert).then(function(response) {
+    yield Feed.create(feed1).then(function(response) {
       success = true;
     }).catch(function(e) {
       expect(e).to.not.be.null;
     });
     assert.isFalse(success, 'Exception not thrown with id as a string');
   }));
+
   it('Requires id to be unique', co.wrap(function* () {
     let sequelize = yield getTestDB();
+    let User = sequelize.models.User;
     let Feed = sequelize.models.Feed;
-    yield Feed.sync({force: true});
-
+    let user1 = yield getUser();
     let insert1 = yield getFeed();
     let insert2 = yield getFeed();
     let success = false;
+    yield User.create(user1);
     yield Feed.create(insert1);
     yield Feed.create(insert2).then(function(response) {
       success = true;
@@ -170,11 +173,16 @@ describe('Feeds', function(){
     });
     assert.isFalse(success, 'Exception not thrown when id is not unique');
   }));
+
   it('Requires title to be present', co.wrap(function* () {
     let sequelize = yield getTestDB();
+    let models = sequelize.models;
     let Feed = sequelize.models.Feed;
-    yield Feed.sync({force: true});
-
+    let usr1 = yield models.User.create({
+      id: 1,
+      login: 'sdfasd',
+      pwd_hash: 'sdfads'
+    });
     let insert = yield getFeed();
     delete(insert.title);
 
@@ -186,11 +194,16 @@ describe('Feeds', function(){
     });
     assert.isFalse(success, 'Exception not thrown when title is not present');
   }));
+
   it('Requires owner_uid to be present', co.wrap(function* () {
     let sequelize = yield getTestDB();
+    let models = sequelize.models; 
     let Feed = sequelize.models.Feed;
-    yield Feed.sync({force: true});
-
+    let usr1 = yield models.User.create({
+      id: 1,
+      login: 'sdfasd',
+      pwd_hash: 'sdfads'
+    });
     let insert = yield getFeed();
     delete(insert.owner_uid);
 
@@ -202,11 +215,16 @@ describe('Feeds', function(){
     });
     assert.isFalse(success, 'Exception not thrown when owner_uid is not present');
   }));
+
   it('Requires feed_url to be present', co.wrap(function* () {
     let sequelize = yield getTestDB();
+    let models = sequelize.models; 
     let Feed = sequelize.models.Feed;
-    yield Feed.sync({force: true});
-
+    let usr1 = yield models.User.create({
+      id: 1,
+      login: 'sdfasd',
+      pwd_hash: 'sdfads'
+    });
     let insert = yield getFeed();
     delete(insert.feed_url);
 
@@ -220,8 +238,13 @@ describe('Feeds', function(){
   }));
   it('When update_interval not present default to 0', co.wrap(function* () {
     let sequelize = yield getTestDB();
+    let models = sequelize.models; 
     let Feed = sequelize.models.Feed;
-    yield Feed.sync({force: true});
+    let usr1 = yield models.User.create({
+      id: 1,
+      login: 'sdfasd',
+      pwd_hash: 'sdfads'
+    });
 
     let insert = yield getFeed();
     yield Feed.create(insert);
@@ -232,8 +255,13 @@ describe('Feeds', function(){
   }));
   it('When icon_url not present default to empty string', co.wrap(function* () {
     let sequelize = yield getTestDB();
+    let models = sequelize.models; 
     let Feed = sequelize.models.Feed;
-    yield Feed.sync({force: true});
+    let usr1 = yield models.User.create({
+      id: 1,
+      login: 'sdfasd',
+      pwd_hash: 'sdfads'
+    });
 
     let insert = yield getFeed();
     yield Feed.create(insert);
@@ -244,8 +272,13 @@ describe('Feeds', function(){
   }));
   it('When purge_interval not present default to 0', co.wrap(function* () {
     let sequelize = yield getTestDB();
+    let models = sequelize.models; 
     let Feed = sequelize.models.Feed;
-    yield Feed.sync({force: true});
+    let usr1 = yield models.User.create({
+      id: 1,
+      login: 'sdfasd',
+      pwd_hash: 'sdfads'
+    });
 
     let insert = yield getFeed();
     yield Feed.create(insert);
@@ -256,8 +289,13 @@ describe('Feeds', function(){
   }));
   it('When last_error not present default to empty string', co.wrap(function* () {
     let sequelize = yield getTestDB();
+    let models = sequelize.models; 
     let Feed = sequelize.models.Feed;
-    yield Feed.sync({force: true});
+    let usr1 = yield models.User.create({
+      id: 1,
+      login: 'sdfasd',
+      pwd_hash: 'sdfads'
+    });
 
     let insert = yield getFeed();
     yield Feed.create(insert);
@@ -268,8 +306,13 @@ describe('Feeds', function(){
   }));
   it('When site_url not present default to empty string', co.wrap(function* () {
     let sequelize = yield getTestDB();
+    let models = sequelize.models; 
     let Feed = sequelize.models.Feed;
-    yield Feed.sync({force: true});
+    let usr1 = yield models.User.create({
+      id: 1,
+      login: 'sdfasd',
+      pwd_hash: 'sdfads'
+    });
 
     let insert = yield getFeed();
     yield Feed.create(insert);
@@ -280,8 +323,13 @@ describe('Feeds', function(){
   }));
   it('When auth_login not present default to empty string', co.wrap(function* () {
     let sequelize = yield getTestDB();
+    let models = sequelize.models; 
     let Feed = sequelize.models.Feed;
-    yield Feed.sync({force: true});
+    let usr1 = yield models.User.create({
+      id: 1,
+      login: 'sdfasd',
+      pwd_hash: 'sdfads'
+    });
 
     let insert = yield getFeed();
     yield Feed.create(insert);
@@ -292,8 +340,13 @@ describe('Feeds', function(){
   }));
   it('When auth_pass not present default to empty string', co.wrap(function* () {
     let sequelize = yield getTestDB();
+    let models = sequelize.models; 
     let Feed = sequelize.models.Feed;
-    yield Feed.sync({force: true});
+    let usr1 = yield models.User.create({
+      id: 1,
+      login: 'sdfasd',
+      pwd_hash: 'sdfads'
+    });
 
     let insert = yield getFeed();
     yield Feed.create(insert);
@@ -302,118 +355,177 @@ describe('Feeds', function(){
 
     expect(retrieve.auth_pass).to.equal('');
   }));
+
+
+
   it('When private not present default to 0', co.wrap(function* () {
     let sequelize = yield getTestDB();
+    let models = sequelize.models; 
     let Feed = sequelize.models.Feed;
-    yield Feed.sync({force: true});
+    let usr1 = yield models.User.create({
+      id: 1,
+      login: 'sdfasd',
+      pwd_hash: 'sdfads'
+    });
 
     let insert = yield getFeed();
     yield Feed.create(insert);
 
     let retrieve = yield Feed.findById(insert.id);
 
-    expect(retrieve.private).to.equal(0);
+    expect(retrieve.private).to.equal(false);
   }));
   it('When rtl_content not present default to 0', co.wrap(function* () {
     let sequelize = yield getTestDB();
+    let models = sequelize.models; 
     let Feed = sequelize.models.Feed;
-    yield Feed.sync({force: true});
+    let usr1 = yield models.User.create({
+      id: 1,
+      login: 'sdfasd',
+      pwd_hash: 'sdfads'
+    });
 
     let insert = yield getFeed();
     yield Feed.create(insert);
 
     let retrieve = yield Feed.findById(insert.id);
 
-    expect(retrieve.rtl_content).to.equal(0);
+    expect(retrieve.rtl_content).to.equal(false);
   }));
+
   it('When hidden not present default to 0', co.wrap(function* () {
     let sequelize = yield getTestDB();
+    let models = sequelize.models; 
     let Feed = sequelize.models.Feed;
-    yield Feed.sync({force: true});
+    let usr1 = yield models.User.create({
+      id: 1,
+      login: 'sdfasd',
+      pwd_hash: 'sdfads'
+    });
 
     let insert = yield getFeed();
     yield Feed.create(insert);
 
     let retrieve = yield Feed.findById(insert.id);
 
-    expect(retrieve.hidden).to.equal(0);
+    expect(retrieve.hidden).to.equal(false);
   }));
   it('When include_in_digest not present default to 1', co.wrap(function* () {
     let sequelize = yield getTestDB();
+    let models = sequelize.models; 
     let Feed = sequelize.models.Feed;
-    yield Feed.sync({force: true});
+    let usr1 = yield models.User.create({
+      id: 1,
+      login: 'sdfasd',
+      pwd_hash: 'sdfads'
+    });
 
     let insert = yield getFeed();
     yield Feed.create(insert);
 
     let retrieve = yield Feed.findById(insert.id);
 
-    expect(retrieve.include_in_digest).to.equal(1);
+    expect(retrieve.include_in_digest).to.equal(true);
   }));
+
+
+
   it('When cache_images not present default to 0', co.wrap(function* () {
     let sequelize = yield getTestDB();
+    let models = sequelize.models; 
     let Feed = sequelize.models.Feed;
-    yield Feed.sync({force: true});
+    let usr1 = yield models.User.create({
+      id: 1,
+      login: 'sdfasd',
+      pwd_hash: 'sdfads'
+    });
 
     let insert = yield getFeed();
     yield Feed.create(insert);
 
     let retrieve = yield Feed.findById(insert.id);
 
-    expect(retrieve.cache_images).to.equal(0);
+    expect(retrieve.cache_images).to.equal(false);
   }));
   it('When hide_images not present default to 0', co.wrap(function* () {
     let sequelize = yield getTestDB();
+    let models = sequelize.models; 
     let Feed = sequelize.models.Feed;
-    yield Feed.sync({force: true});
+    let usr1 = yield models.User.create({
+      id: 1,
+      login: 'sdfasd',
+      pwd_hash: 'sdfads'
+    });
 
     let insert = yield getFeed();
     yield Feed.create(insert);
 
     let retrieve = yield Feed.findById(insert.id);
 
-    expect(retrieve.hide_images).to.equal(0);
+    expect(retrieve.hide_images).to.equal(false);
   }));
+
+
   it('When cache_content not present default to 0', co.wrap(function* () {
     let sequelize = yield getTestDB();
+    let models = sequelize.models; 
     let Feed = sequelize.models.Feed;
-    yield Feed.sync({force: true});
+    let usr1 = yield models.User.create({
+      id: 1,
+      login: 'sdfasd',
+      pwd_hash: 'sdfads'
+    });
 
     let insert = yield getFeed();
     yield Feed.create(insert);
 
     let retrieve = yield Feed.findById(insert.id);
 
-    expect(retrieve.cache_content).to.equal(0);
+    expect(retrieve.cache_content).to.equal(false);
   }));
   it('When auth_pass_encrypted not present default to 0', co.wrap(function* () {
     let sequelize = yield getTestDB();
+    let models = sequelize.models; 
     let Feed = sequelize.models.Feed;
-    yield Feed.sync({force: true});
+    let usr1 = yield models.User.create({
+      id: 1,
+      login: 'sdfasd',
+      pwd_hash: 'sdfads'
+    });
 
     let insert = yield getFeed();
     yield Feed.create(insert);
 
     let retrieve = yield Feed.findById(insert.id);
 
-    expect(retrieve.auth_pass_encrypted).to.equal(0);
+    expect(retrieve.auth_pass_encrypted).to.equal(false);
   }));
   it('When always_display_enclosures not present default to 0', co.wrap(function* () {
     let sequelize = yield getTestDB();
+    let models = sequelize.models; 
     let Feed = sequelize.models.Feed;
-    yield Feed.sync({force: true});
+    let usr1 = yield models.User.create({
+      id: 1,
+      login: 'sdfasd',
+      pwd_hash: 'sdfads'
+    });
 
     let insert = yield getFeed();
     yield Feed.create(insert);
 
     let retrieve = yield Feed.findById(insert.id);
 
-    expect(retrieve.always_display_enclosures).to.equal(0);
+    expect(retrieve.always_display_enclosures).to.equal(false);
   }));
   it('When update_method not present default to 0', co.wrap(function* () {
     let sequelize = yield getTestDB();
+    let models = sequelize.models; 
     let Feed = sequelize.models.Feed;
-    yield Feed.sync({force: true});
+    let usr1 = yield models.User.create({
+      id: 1,
+      login: 'sdfasd',
+      pwd_hash: 'sdfads'
+    });
 
     let insert = yield getFeed();
     yield Feed.create(insert);
@@ -424,8 +536,13 @@ describe('Feeds', function(){
   }));
   it('When order_id not present default to 0', co.wrap(function* () {
     let sequelize = yield getTestDB();
+    let models = sequelize.models; 
     let Feed = sequelize.models.Feed;
-    yield Feed.sync({force: true});
+    let usr1 = yield models.User.create({
+      id: 1,
+      login: 'sdfasd',
+      pwd_hash: 'sdfads'
+    });
 
     let insert = yield getFeed();
     yield Feed.create(insert);
@@ -436,56 +553,85 @@ describe('Feeds', function(){
   }));
   it('When mark_unread_on_update not present default to 0', co.wrap(function* () {
     let sequelize = yield getTestDB();
+    let models = sequelize.models; 
     let Feed = sequelize.models.Feed;
-    yield Feed.sync({force: true});
+    let usr1 = yield models.User.create({
+      id: 1,
+      login: 'sdfasd',
+      pwd_hash: 'sdfads'
+    });
 
     let insert = yield getFeed();
     yield Feed.create(insert);
 
     let retrieve = yield Feed.findById(insert.id);
 
-    expect(retrieve.mark_unread_on_update).to.equal(0);
+    expect(retrieve.mark_unread_on_update).to.equal(false);
   }));
   it('When update_on_checksum_change not present default to 0', co.wrap(function* () {
     let sequelize = yield getTestDB();
+    let models = sequelize.models; 
     let Feed = sequelize.models.Feed;
-    yield Feed.sync({force: true});
+    let usr1 = yield models.User.create({
+      id: 1,
+      login: 'sdfasd',
+      pwd_hash: 'sdfads'
+    });
 
     let insert = yield getFeed();
     yield Feed.create(insert);
 
     let retrieve = yield Feed.findById(insert.id);
 
-    expect(retrieve.update_on_checksum_change).to.equal(0);
+    expect(retrieve.update_on_checksum_change).to.equal(false);
   }));
   it('When strip_images not present default to 0', co.wrap(function* () {
     let sequelize = yield getTestDB();
+    let models = sequelize.models; 
     let Feed = sequelize.models.Feed;
-    yield Feed.sync({force: true});
+    let usr1 = yield models.User.create({
+      id: 1,
+      login: 'sdfasd',
+      pwd_hash: 'sdfads'
+    });
 
     let insert = yield getFeed();
     yield Feed.create(insert);
 
     let retrieve = yield Feed.findById(insert.id);
 
-    expect(retrieve.strip_images).to.equal(0);
+    expect(retrieve.strip_images).to.equal(false);
   }));
   it('When view_setting not present default to empty string', co.wrap(function* () {
     let sequelize = yield getTestDB();
+    let models = sequelize.models; 
     let Feed = sequelize.models.Feed;
-    yield Feed.sync({force: true});
+    let usr1 = yield models.User.create({
+      id: 1,
+      login: 'sdfasd',
+      pwd_hash: 'sdfads'
+    });
 
     let insert = yield getFeed();
     yield Feed.create(insert);
 
     let retrieve = yield Feed.findById(insert.id);
 
-    expect(retrieve.view_setting).to.equal('');
+    var fn = function(){
+      return retrieve.view_setting;
+    }
+
+    expect(fn).to.not.throw(/view_setting is empty/);
   }));
   it('When pubsub_state not present default to 0', co.wrap(function* () {
     let sequelize = yield getTestDB();
+    let models = sequelize.models; 
     let Feed = sequelize.models.Feed;
-    yield Feed.sync({force: true});
+    let usr1 = yield models.User.create({
+      id: 1,
+      login: 'sdfasd',
+      pwd_hash: 'sdfads'
+    });
 
     let insert = yield getFeed();
     yield Feed.create(insert);
@@ -496,8 +642,13 @@ describe('Feeds', function(){
   }));
   it('When feed_language not present default to empty string', co.wrap(function* () {
     let sequelize = yield getTestDB();
+    let models = sequelize.models; 
     let Feed = sequelize.models.Feed;
-    yield Feed.sync({force: true});
+    let usr1 = yield models.User.create({
+      id: 1,
+      login: 'sdfasd',
+      pwd_hash: 'sdfads'
+    });
 
     let insert = yield getFeed();
     yield Feed.create(insert);
@@ -507,15 +658,4 @@ describe('Feeds', function(){
     expect(retrieve.feed_language).to.equal('');
   }));
 });
-
-
-
-
-
-
-
-
-
-
-
 
