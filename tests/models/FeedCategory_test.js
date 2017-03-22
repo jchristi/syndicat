@@ -27,12 +27,12 @@ describe('FeedCategory', function() {
       expect(sequelize.models.FeedCategory.associations).to.have.property('User');
     }));
 
-    it('has a FedCategory (parent) property', co.wrap(function* (){
+    it('has a Parent property', co.wrap(function* (){
       let sequelize = yield getTestDB();
       expect(sequelize.models.FeedCategory.associations).to.have.property('Parent');
     }));
 
-    it('has a FedCategory (children) property', co.wrap(function* (){
+    it('has a Children property', co.wrap(function* (){
       let sequelize = yield getTestDB();
       expect(sequelize.models.FeedCategory.associations).to.have.property('Children');
     }));
