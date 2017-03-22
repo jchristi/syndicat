@@ -11,6 +11,7 @@ node_modules
 *.db-shm
 *.db-wal
 *.db.bak
+*.sqlite
 
 # Vagrant
 .vagrant*
