@@ -16,6 +16,7 @@ module.exports = function(sequelize) {
   models.Feed.belongsTo(models.User, { foreignKey: 'owner_uid' });
   models.AccessKey.belongsTo(models.User, { foreignKey: 'owner_uid' });
   models.FeedCategory.belongsTo(models.User, { foreignKey: 'owner_uid' });
-  models.FeedCategory.belongsTo(models.FeedCategory, { foreignKey: 'parent_cat' });
+  models.FeedCategory.belongsTo(models.FeedCategory, { foreignKey: 'parent_cat', as: 'Parent' });
+  models.FeedCategory.hasMany(models.FeedCategory, {foreignKey: 'parent_cat', as: 'Children'});
   return models;
 };
