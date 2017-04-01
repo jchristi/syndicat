@@ -2,7 +2,7 @@
 //TEST SETUP
 let Entry;
 let assert = chai.assert;
-let GetEntry = () =>  {
+let getEntry = () =>  {
   return {
     id: 1,
     title: 'Test Entry',
@@ -25,7 +25,7 @@ describe('Entry', function() {
   })();
   it('Saves and retrieves successfully', co.wrap(function* () {
     yield Entry.sync({force: true});
-    let insert = GetEntry();
+    let insert = getEntry();
     yield Entry.create(insert);
 
     let retrieve = yield Entry.findById('1');
@@ -45,8 +45,8 @@ describe('Entry', function() {
   it('Auto increments on id', co.wrap(function* () {
     yield Entry.sync({force: true});
 
-    let insert1 = GetEntry();
-    let insert2 = GetEntry();
+    let insert1 = getEntry();
+    let insert2 = getEntry();
     delete(insert1.id);
     delete(insert2.id);
     yield Entry.create(insert1);
@@ -61,7 +61,7 @@ describe('Entry', function() {
     let Entry = sequelize.models.Entry;
     yield Entry.sync({force: true});
 
-    let insert = GetEntry();
+    let insert = getEntry();
     insert.id = 'STRING';
 
     let success = false;
@@ -78,8 +78,8 @@ describe('Entry', function() {
     let Entry = sequelize.models.Entry;
     yield Entry.sync({force: true});
 
-    let insert1 = GetEntry();
-    let insert2 = GetEntry();
+    let insert1 = getEntry();
+    let insert2 = getEntry();
     let success = false;
     yield Entry.create(insert1);
     yield Entry.create(insert2).then(function(response) {
@@ -95,7 +95,7 @@ describe('Entry', function() {
     let Entry = sequelize.models.Entry;
     yield Entry.sync({force: true});
 
-    let insert = GetEntry();
+    let insert = getEntry();
     delete(insert.title);
 
     let success = false;
@@ -112,7 +112,7 @@ describe('Entry', function() {
     let Entry = sequelize.models.Entry;
     yield Entry.sync({force: true});
 
-    let insert = GetEntry();
+    let insert = getEntry();
     delete(insert.guid);
 
     let success = false;
@@ -129,7 +129,7 @@ describe('Entry', function() {
     let Entry = sequelize.models.Entry;
     yield Entry.sync({force: true});
 
-    let insert = GetEntry();
+    let insert = getEntry();
     delete(insert.link);
 
     let success = false;
@@ -146,7 +146,7 @@ describe('Entry', function() {
     let Entry = sequelize.models.Entry;
     yield Entry.sync({force: true});
 
-    let insert = GetEntry();
+    let insert = getEntry();
     delete(insert.updated);
 
     let success = false;
@@ -163,7 +163,7 @@ describe('Entry', function() {
     let Entry = sequelize.models.Entry;
     yield Entry.sync({force: true});
 
-    let insert = GetEntry();
+    let insert = getEntry();
     delete(insert.content);
 
     let success = false;
@@ -180,7 +180,7 @@ describe('Entry', function() {
     let Entry = sequelize.models.Entry;
     yield Entry.sync({force: true});
 
-    let insert = GetEntry();
+    let insert = getEntry();
     delete(insert.content_hash);
 
     let success = false;
@@ -197,7 +197,7 @@ describe('Entry', function() {
     let Entry = sequelize.models.Entry;
     yield Entry.sync({force: true});
 
-    let insert = GetEntry();
+    let insert = getEntry();
     yield Entry.create(insert);
 
     let retrieve = yield Entry.findById(insert.id);
@@ -210,7 +210,7 @@ describe('Entry', function() {
     let Entry = sequelize.models.Entry;
     yield Entry.sync({force: true});
 
-    let insert = GetEntry();
+    let insert = getEntry();
     delete(insert.date_entered);
 
     let success = false;
@@ -227,7 +227,7 @@ describe('Entry', function() {
     let Entry = sequelize.models.Entry;
     yield Entry.sync({force: true});
 
-    let insert = GetEntry();
+    let insert = getEntry();
     delete(insert.date_updated);
 
     let success = false;
@@ -244,7 +244,7 @@ describe('Entry', function() {
     let Entry = sequelize.models.Entry;
     yield Entry.sync({force: true});
 
-    let insert = GetEntry();
+    let insert = getEntry();
     yield Entry.create(insert);
 
     let retrieve = yield Entry.findById(insert.id);
@@ -257,7 +257,7 @@ describe('Entry', function() {
     let Entry = sequelize.models.Entry;
     yield Entry.sync({force: true});
 
-    let insert = GetEntry();
+    let insert = getEntry();
     yield Entry.create(insert);
 
     let retrieve = yield Entry.findById(insert.id);
@@ -270,7 +270,7 @@ describe('Entry', function() {
     let Entry = sequelize.models.Entry;
     yield Entry.sync({force: true});
 
-    let insert = GetEntry();
+    let insert = getEntry();
     yield Entry.create(insert);
 
     let retrieve = yield Entry.findById(insert.id);
