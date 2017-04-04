@@ -1,5 +1,6 @@
 'use strict';
 
+
 var l               = require('lodash');
 var co              = require('co');
 var chai            = require('chai');
@@ -66,6 +67,7 @@ global.getFeed = function(){
 
 
 describe('Feeds', function(){
+
   it('100 models', co.wrap(function* (){
     for(let i = 1; i < 100; i++){
       let sequelize = yield getTestDB();

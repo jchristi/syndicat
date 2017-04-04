@@ -54,6 +54,7 @@ module.exports = function(sequelize, DataTypes) {
 
     classMethods: {
 
+
       /**
        * method used to declare all model associations
        * @param {Object} models
@@ -77,4 +78,5 @@ module.exports = function(sequelize, DataTypes) {
 
   });
   return FeedCategory;
+
 };

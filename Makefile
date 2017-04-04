@@ -5,7 +5,7 @@ TESTDIR=tests/
 
 
 lint:
-	$(BINDIR)/eslint .
+	$(BINDIR)/eslint --ignore-path .gitignore .
 
 test:
 	$(MOCHA) $(MOCHADEFAULTOPTS) \
