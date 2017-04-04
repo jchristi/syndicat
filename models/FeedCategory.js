@@ -54,8 +54,29 @@ module.exports = function(sequelize, DataTypes) {
 
     classMethods: {
 
+
+      /**
+       * method used to declare all model associations
+       * @param {Object} models
+       */
+      associate: models => {
+        models.importModels([ 'User', 'Feed', 'FeedCategory', 'Filter2Rule' ]);
+        FeedCategory.belongsTo(models.User, { foreignKey: 'owner_uid' });
+        FeedCategory.hasMany(models.Feed, { foreignKey: 'cat_id' });
+        FeedCategory.hasMany(models.Filter2Rule, { foreignKey: 'cat_id' });
+        FeedCategory.hasMany(models.FeedCategory, {
+          foreignKey: 'parent_cat',
+          as: 'Children'
+        });
+        FeedCategory.belongsTo(models.FeedCategory, {
+          foreignKey: 'parent_cat',
+          as: 'Parent'
+        });
+      }
+
     } // end static methods
 
   });
   return FeedCategory;
-}; 
+
+};
