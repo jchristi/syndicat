@@ -10,7 +10,6 @@ lint:
 test:
 	$(MOCHA) $(MOCHADEFAULTOPTS) \
 		--full-trace \
-		--bail \
 		$(TESTDIR)
 
 testdebug:

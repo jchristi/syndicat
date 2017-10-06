@@ -1,14 +1,13 @@
 'use strict';
 
-var l               = require('lodash');
-var co              = require('co');
-var chai            = require('chai');
-var chaiAsPromised  = require('chai-as-promised');
-var Sequelize       = require('sequelize');
-var Promise         = Sequelize.Promise;
-var fs              = Promise.promisifyAll(require('fs'));
-// var models          = require('../models');
-
+const l               = require('lodash');
+const co              = require('co');
+const chai            = require('chai');
+const chaiAsPromised  = require('chai-as-promised');
+const Sequelize       = require('sequelize');
+const Promise         = Sequelize.Promise;
+const fs              = Promise.promisifyAll(require('fs'));
+const loadModels      = require('../models');
 
 chai.use(chaiAsPromised);
 
@@ -43,6 +42,6 @@ global.getTestDB = co.wrap(function* () {
     operatorsAliases: false
   });
   yield sequelize.query('PRAGMA journal_mode=MEMORY');
-  let models = require('../models')(sequelize);
+  let models = loadModels(sequelize);
   return sequelize;
 });
