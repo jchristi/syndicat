@@ -21,3 +21,10 @@ A few features that *may* be implemented in the future:
 
 ## Contributing
 Contributions welcome. Please include mocha tests with all PRs.
+
+## Misc
+### Strict Mode
+Why you should use strict mode everywhere: https://stackoverflow.com/a/23765454
+
+## Useful Resources
+- [Node Feature Support Chart](http://node.green/)

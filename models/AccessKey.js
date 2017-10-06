@@ -7,7 +7,7 @@ module.exports = function(sequelize, DataTypes) {
    *
    * Access credentials if a feed requires authentication
    */
-  var AccessKey = sequelize.define("AccessKey", {
+  let AccessKey = sequelize.define('AccessKey', {
 
     //
     // Attributes
@@ -47,7 +47,7 @@ module.exports = function(sequelize, DataTypes) {
     // Options
     //
 
-    tableName: 'ttrss_access_keys',
+    tableName: 'ttrss_access_keys'
 
     /*indexes: [
       {
@@ -57,15 +57,6 @@ module.exports = function(sequelize, DataTypes) {
         fields: ['owner_uid']
       }
     ],*/
-
-
-    //
-    // static methods
-    //
-
-    classMethods: {
-
-    } // end static methods
 
   });
 

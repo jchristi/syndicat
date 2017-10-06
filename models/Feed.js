@@ -4,12 +4,12 @@
 /**
  * Feed
  *
- * Feeds are a representation of a site stored in Syndicat.  
- * Multiple users can have the same feed, but will have different 
- * FeedEntries for each.  
- */ 
+ * Feeds are a representation of a site stored in Syndicat.
+ * Multiple users can have the same feed, but will have different
+ * FeedEntries for each.
+ */
 module.exports = function(sequelize, DataTypes) {
-  var Feed = sequelize.define('Feed', {
+  let Feed = sequelize.define('Feed', {
 
     //
     // Attributes
@@ -188,20 +188,8 @@ module.exports = function(sequelize, DataTypes) {
     // Options
     //
 
-    tableName: 'ttrss_feeds',
+    tableName: 'ttrss_feeds'
 
-
-    //
-    // static methods
-    //
-
-    classMethods: {
-
-      /**
-       * method used to declare all model associations
-       * @param {Object} models
-       */
-    } // end class methods
   });
 
   return Feed;

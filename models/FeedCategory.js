@@ -1,7 +1,12 @@
 'use strict';
 
 module.exports = function(sequelize, DataTypes) {
-  var FeedCategory = sequelize.define('FeedCategory', {
+
+  /**
+   * FeedCategory
+   *
+   */
+  let FeedCategory = sequelize.define('FeedCategory', {
     id: {
       type: DataTypes.INTEGER(11),
       allowNull: false,
@@ -58,4 +63,4 @@ module.exports = function(sequelize, DataTypes) {
 
   });
   return FeedCategory;
-}; 
+};
