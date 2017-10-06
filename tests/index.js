@@ -2,21 +2,21 @@
 
 var l               = require('lodash');
 var co              = require('co');
-var chai            = require('chai');
-var chaiAsPromised  = require('chai-as-promised');
+//var chai            = require('chai');
+//var chaiAsPromised  = require('chai-as-promised');
 var Sequelize       = require('sequelize');
 var Promise         = Sequelize.Promise;
 var fs              = Promise.promisifyAll(require('fs'));
-// var models          = require('../models');
+var loadModels      = require('../models');
 
 
-chai.use(chaiAsPromised);
+//chai.use(chaiAsPromised);
 
 global.l = l;
-global.co = co;
-global.chai = chai;
-global.expect = chai.expect;
-global.chaiAsPromised = chaiAsPromised;
+//global.co = co;
+//global.chai = chai;
+//global.expect = chai.expect;
+//global.chaiAsPromised = chaiAsPromised;
 global.fs = fs;
 
 /**
@@ -43,6 +43,6 @@ global.getTestDB = co.wrap(function* () {
     operatorsAliases: false
   });
   yield sequelize.query('PRAGMA journal_mode=MEMORY');
-  let models = require('../models')(sequelize);
+  let models = loadModels(sequelize);
   return sequelize;
 });

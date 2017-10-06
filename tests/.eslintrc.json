@@ -1,21 +1,19 @@
 {
+    "parserOptions": {
+        "ecmaVersion": 8
+    },
     "env": {
-        "es6": true,
         "node": true,
-        "mocha": true
+        "jest": true
     },
     "globals": {
-      "l": false,
-      "co": false,
-      "chai": false,
-      "expect": false,
-      "chaiAsPromised": false,
-      "fs": false,
-      "getTestDB": false,
-      "createTestModel": false,
-      "ModelUtils": false
+        "expect": false,
+        "fs": false,
+        "getTestDB": false
+        "l": false
     },
+    "extends": "eslint:recommended",
     "rules": {
-      "no-unused-vars": "off"
+        "no-unused-vars": "off"
     }
 }

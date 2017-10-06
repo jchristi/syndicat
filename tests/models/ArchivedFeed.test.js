@@ -1,9 +1,7 @@
 'use strict';
 
 describe('ArchivedFeed', () => {
-  var db;
-  var ctx = {};
-
+  test('true', () => { });
 //   describe('associations', function() {
 //     beforeEach('get models', co.wrap(function* () {
 //       db = yield getTestDB();
@@ -37,5 +35,4 @@ describe('ArchivedFeed', () => {
 //         // include:
 //     //}));
 //   });
-
 });

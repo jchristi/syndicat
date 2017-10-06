@@ -11,6 +11,9 @@
     "postmerge": "npm install",
     "test": "eslint && make test"
   },
+  "jest": {
+    "setupTestFrameworkScriptFile": "<rootDir>/tests/index.js"
+  },
   "keywords": [
     "rss",
     "feed",
