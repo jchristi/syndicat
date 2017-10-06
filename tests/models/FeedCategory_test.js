@@ -1,7 +1,7 @@
 'use strict';
 
-describe('FeedCategory', function() {
-  it('a valid record should be inserted', co.wrap(function* () {
+describe('FeedCategory', () => {
+  test('a valid record should be inserted', co.wrap(function* () {
     let sequelize = yield getTestDB();
     let models = sequelize.models;
     let usr1 = yield models.User.create({
@@ -21,25 +21,25 @@ describe('FeedCategory', function() {
     expect(key.id).to.equal(1);
   }));
 
-  describe('associations', function() {
-    it('has User property', co.wrap(function* (){
+  describe('associations', () => {
+    test('has User property', co.wrap(function* (){
       let sequelize = yield getTestDB();
       expect(sequelize.models.FeedCategory.associations).to.have.property('User');
     }));
 
-    it('has a Parent property', co.wrap(function* (){
+    test('has a Parent property', co.wrap(function* (){
       let sequelize = yield getTestDB();
       expect(sequelize.models.FeedCategory.associations).to.have.property('Parent');
     }));
 
-    it('has a Children property', co.wrap(function* (){
+    test('has a Children property', co.wrap(function* (){
       let sequelize = yield getTestDB();
       expect(sequelize.models.FeedCategory.associations).to.have.property('Children');
     }));
   });
 
-  describe('invalid states validation', function() {
-    it('is invalid without a title', co.wrap(function* () {
+  describe('invalid states validation', () => {
+    test('is invalid without a title', co.wrap(function* () {
       let sequelize = yield getTestDB();
       let models = sequelize.models;
 

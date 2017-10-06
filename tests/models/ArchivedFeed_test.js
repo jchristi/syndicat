@@ -1,6 +1,6 @@
 'use strict';
 
-describe('ArchivedFeed', function() {
+describe('ArchivedFeed', () => {
   var db;
   var ctx = {};
 

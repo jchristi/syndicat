@@ -1,7 +1,7 @@
 'use strict';
 
-describe('Feed', function(){
-  it('1 models', co.wrap(function* (){
+describe('Feed', () => {
+  test('1 models', co.wrap(function* (){
     for(let i = 1; i < 1; i++){
       let sequelize = yield getTestDB();
       let models = sequelize.models;
