@@ -33,7 +33,7 @@ global.getTestDB = co.wrap(function* () {
                   min: 1,
                   idle: 1
                   }*/,
-      // typeValidation: true,
+    // typeValidation: true,
     logging: null, //console.log, // TODO: output to log file
     //benchmark: true,
     define: {
