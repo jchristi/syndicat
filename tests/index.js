@@ -39,7 +39,8 @@ global.getTestDB = co.wrap(function* () {
     define: {
       timestamps: false,
       underscored: true
-    }
+    },
+    operatorsAliases: false
   });
   yield sequelize.query('PRAGMA journal_mode=MEMORY');
   let models = require('../models')(sequelize);

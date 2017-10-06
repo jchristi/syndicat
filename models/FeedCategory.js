@@ -50,17 +50,10 @@ module.exports = function(sequelize, DataTypes) {
       plural: 'FeedCategories',
       singular: 'FeedCategory'
     },
-    tableName: 'ttrss_feed_categories',
 
-
-    //
-    // static methods
-    //
-
-    classMethods: {
-
-    } // end static methods
+    tableName: 'ttrss_feed_categories'
 
   });
+
   return FeedCategory;
 };
