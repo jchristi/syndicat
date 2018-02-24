@@ -1,8 +1,8 @@
 'use strict';
 
-describe('AccessKey', function() {
-  it('10 models', async () => {
-    for (let i = 1; i <= 10; i++) {
+describe('AccessKey', () => {
+  it('a valid record should be inserted', async () => {
+    for (let i = 1; i <= 2; i++) {
       let sequelize = await getTestDB();
       let models = sequelize.models;
       let usr1 = await models.User.create({
@@ -28,5 +28,13 @@ describe('AccessKey', function() {
       expect(key).to.have.property('id', i);
       sequelize.close();
     }
+  });
+  describe('associations', () => {
+    it('has User property', async () => {
+      expect(readonly.models.AccessKey.associations).to.have.property('User');
+    });
+    it('has Feed property', async () => {
+      expect(readonly.models.AccessKey.associations).to.have.property('Feed');
+    });
   });
 });

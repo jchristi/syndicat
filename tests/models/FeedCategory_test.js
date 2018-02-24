@@ -20,24 +20,19 @@ describe('FeedCategory', function() {
     sequelize.close();
   });
 
-  describe('associations', function() {
+  describe('associations', () => {
     it('has User property', async () => {
-      let s = await getTestDB();
-      expect(s.models.FeedCategory.associations).to.have.property('User');
+      expect(readonly.models.FeedCategory.associations).to.have.property('User');
     });
-
     it('has a Parent property', async () => {
-      let sequelize = await getTestDB();
-      expect(sequelize.models.FeedCategory.associations).to.have.property('Parent');
+      expect(readonly.models.FeedCategory.associations).to.have.property('Parent');
     });
-
     it('has a Children property', async () => {
-      let sequelize = await getTestDB();
-      expect(sequelize.models.FeedCategory.associations).to.have.property('Children');
+      expect(readonly.models.FeedCategory.associations).to.have.property('Children');
     });
   });
 
-  describe('invalid states validation', function() {
+  describe('invalid states validation', () => {
     it('is invalid without a title', async () => {
       let sequelize = await getTestDB();
       let models = sequelize.models;

@@ -16,7 +16,8 @@
       "fs": false,
       "getTestDB": false,
       "createTestModel": false,
-      "ModelUtils": false
+      "ModelUtils": false,
+      "readonly": false
     },
     "extends": "eslint:recommended",
     "rules": {

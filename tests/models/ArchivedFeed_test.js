@@ -1,24 +1,14 @@
 'use strict';
 
-describe('ArchivedFeed', function() {
-  var db;
-  var ctx = {};
-
-//   describe('associations', function() {
-//     beforeEach('get models', co.wrap(function* () {
-//       db = yield getTestDB();
-//       let _result = yield db.loadModels(['User', 'ArchivedFeed']);
-//       _result = yield db.associateAllModels();
-//     }));
-//     it('has User property', function(done) {
-//       expect(db.ArchivedFeed.associations).to.have.property('User');
-//       done();
-//     });
-//     it('has UserEntries property', function(done) {
-//       expect(db.ArchivedFeed.associations).to.have.property('UserEntries');
-//       done();
-//     });
-//   });
+describe('ArchivedFeed', () => {
+  describe('associations', () => {
+    it('has User property', async () => {
+      expect(readonly.models.ArchivedFeed.associations).to.have.property('User');
+    });
+    it('has UserEntries property', async () => {
+      expect(readonly.models.ArchivedFeed.associations).to.have.property('UserEntries');
+    });
+  });
 
 //   describe.skip('with fixtures', function() {
 //     beforeEach('create ArchivedFeed fixtures', co.wrap(function* () {

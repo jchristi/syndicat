@@ -18,6 +18,9 @@ A few features that *may* be implemented in the future:
 * Article content compression in database BLOB field (Snappy, EXI, or Fast Infoset)
   * Snappy - [node-snappy](https://github.com/kesla/node-snappy)
   * EXI - [exificient.js](https://github.com/EXIficient/exificient.js)
+* Feed suggestions [Wordpress](https://codex.wordpress.org/WordPress_Feeds#Finding_Your_Feed_URL)
+* Aggregate similar or duplicate / linked articles
+* Smart ranking and filtering
 
 ## Contributing
 Contributions welcome. Please include mocha tests with all PRs.
