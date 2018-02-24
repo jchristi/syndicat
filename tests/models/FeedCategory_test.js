@@ -49,7 +49,7 @@ describe('FeedCategory', function() {
         });
       } catch (e) {
         if (e.name == "SequelizeValidationError"
-            && e.message == "notNull Violation: title cannot be null")
+            && e.message.indexOf("title cannot be null") !== -1)
           sequelizeValidationErrorThrown = true;
       }
       expect(sequelizeValidationErrorThrown).to.equal(true);
