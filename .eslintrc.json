@@ -4,6 +4,13 @@
         "node": true
     },
     "extends": "eslint:recommended",
+    "parserOptions": {
+      "ecmaVersion": 2018,
+      "sourceType": "script",
+      "ecmaFeatures": {
+        "impliedStrict": true,
+      }
+    },
     "rules": {
         "strict": [ 1, "global" ],
         "indent": [ "error", 2 ],
