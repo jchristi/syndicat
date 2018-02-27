@@ -9,7 +9,7 @@ Currently no working installation.
 A few features that *may* be implemented in the future:
 
 * full article fetching
-* find hidden feeds (by guessing common feed URL patterns)
+* find hidden feeds (by guessing common feed URL patterns) - DONE
 * embedded [spritzing](http://spritzinc.com/) for fast, easy article reading.
   Doesn't work well for articles with tables or images (See also: [Glance](https://github.com/Miserlou/Glance),
   [Squirt](https://github.com/cameron/squirt))
@@ -18,9 +18,10 @@ A few features that *may* be implemented in the future:
 * Article content compression in database BLOB field (Snappy, EXI, or Fast Infoset)
   * Snappy - [node-snappy](https://github.com/kesla/node-snappy)
   * EXI - [exificient.js](https://github.com/EXIficient/exificient.js)
-* Feed suggestions [Wordpress](https://codex.wordpress.org/WordPress_Feeds#Finding_Your_Feed_URL)
 * Aggregate similar or duplicate / linked articles
 * Smart ranking and filtering
+* Scrapper plugins to convert HTML pages to feeds ([YouTube](https://github.com/porjo/freshtube/blob/master/js/script.js), [Twitter](https://www.ibm.com/developerworks/library/wa-convert-your-twitter-lists-to-rss/index.html), [Google+](https://www.labnol.org/internet/google-plus-rss-feeds/25557/), GitHub, Twitch.tv)
+* Masquerade user-agent string [1](https://techblog.willshouse.com/2012/01/03/most-common-user-agents/), [2](https://udger.com/resources/ua-list)
 
 ## Contributing
 Contributions welcome. Please include mocha tests with all PRs.

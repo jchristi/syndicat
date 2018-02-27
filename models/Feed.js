@@ -1,5 +1,9 @@
 'use strict';
 
+const _       = require('lodash');
+const cheerio = require('cheerio');
+const request = require('request-promise');
+const funcs   = require('../functions/feeds');
 
 /**
  * Feed
@@ -191,6 +195,24 @@ module.exports = function(sequelize, DataTypes) {
     tableName: 'ttrss_feeds'
 
   });
+
+  /**
+   * move this to an API
+   */
+  Feed.subscribe = function(feed_url) {
+    // validate URL
+    // normalize URL
+    // check if already subscribed
+    let feed = await Feed.create({
+      owner_uid: i,
+      title: 'test title',
+      feed_url: feed_url,
+      icon_url: '',
+      update_interval: 1000000,
+      site_url: ''
+    });
+    return feed;
+  };
 
   return Feed;
 };

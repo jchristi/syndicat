@@ -1,7 +1,18 @@
+'use strict';
+
 const _          = require('lodash');
 const cheerio    = require('cheerio');
-const request    = require('request-promise');
-const feedparser = require('feedparser-promised');
+const request    = require('request');
+const rp         = require('request-promise');
+const feedparser = require('feedparser');
+const fp         = require('feedparser-promised');
+const normalize_url = require('normalize-url');
+
+console.debug = function(args) {
+  if (process.env.DEBUG == 'true'){
+    console.log(args);
+  }
+}
 
 /**
  * find_feed_url
@@ -9,20 +20,40 @@ const feedparser = require('feedparser-promised');
  * @param String url - a URL to use as a search for feed URLs
  * @return Array feed_urls - a list of feed URLs
  */
-async function find_feed_urls(url) { // TODO: also take a string of html
-  // normalize url
-  url = url.trim();
-  if (url[url.length - 1] == '/') url = url.substring(0, url.length - 1);
+async function find_feed_urls(url) {
+  // TODO: make url an opts object
+  // ops = { uri: url, html: html, cheerio: $ }
+  let html = null;
 
-  // TODO: use a proper logger class/library
-  console.debug('Fetching html from ' + url);
+  try {
+    url = normalize_url(url);
+  } catch(e) {
+    if (e.message !== 'Invalid URL') throw e;
+    // Treat url as if it were an html string
+    html = url;
+  }
 
-  // TODO: if a plugin for the site detected, use that instead of this
-  // (youtube, twitter, google+, etc)
-  // TODO: use EventEmitter to emit a signal for 'find feed url'
+  // TODO: Clean this up (separate into more functions)
+  if (html === null) {
+    // TODO: use a proper logger class/library
+    console.debug('Fetching html from ' + url);
 
-  const resp = await http_request(url);
-  const $ = cheerio.load(resp.body);
+    // TODO: if a plugin for the site detected, use that instead of this
+    // (youtube, twitter, google+, etc)
+    // TODO: use EventEmitter to emit a signal for 'find feed url'
+
+    try {
+      let response = await http_request(url);
+      //console.log(response);
+      html = response.body;
+    } catch(e) {
+      // TODO: difference between `throw Exception()` and `throw new Error()` ???
+      // see: https://www.joyent.com/node-js/production/design/errors
+      throw Exception('Error looking at original URL');
+    }
+  }
+
+  const $ = cheerio.load(html);
   const nodes = $('link[type="application/rss+xml"], link[type="application/atom+xml"]')
     .toArray();
   if (nodes.length > 0) {
@@ -49,7 +80,7 @@ async function find_feed_urls(url) { // TODO: also take a string of html
     '[href*="index.xml"]',
   ].join(', ');
   const nodes2 = $(unreliable_selectors).toArray();
-  const feed_candidate_urls = nodes2.map(x => x.attribs.href.trim());
+  const feed_candidate_urls = _.uniq(nodes2.map(x => x.attribs.href.trim()));
   let feed_urls2 = [];
   for (const candidate_url of feed_candidate_urls) {
     console.debug(`candidate_url: ${candidate_url}`);
@@ -63,6 +94,7 @@ async function find_feed_urls(url) { // TODO: also take a string of html
   }
 
   // This is a list of potential feed urls. It is sorted by most common occurrences
+  // Feed URL suggestions: https://codex.wordpress.org/WordPress_Feeds#Finding_Your_Feed_URL
   // TODO: should probably store these either in the database or config file
   const feed_url_guesses = [
     '/feed',
@@ -103,6 +135,7 @@ async function find_feed_urls(url) { // TODO: also take a string of html
     '/posts.atom',
     '/feed/podcast',
   ];
+  // TODO: start at current url and work back to base_url
   const base_url = get_base_url(url);
   console.debug(`base_url: ${base_url}`);
   for (const endpoint of feed_url_guesses) {
@@ -139,7 +172,7 @@ async function http_request(url, opts) {
   };
   opts = opts || {};
   opts = Object.assign(default_opts, opts);
-  return await request(opts)
+  return await rp(opts)
 }
 
 
@@ -160,9 +193,9 @@ async function url_is_feed(url) {
   }
   // check if body content is a valid feed
   try {
-    let feed = await _create_feed(response.body);
-    console.debug('feed');
-    console.debug(feed);
+    let feed = await _create_feed(url/*response.body*/);
+    // console.debug('feed');
+    // console.debug(feed);
   } catch (e) {
     // not be a valid feed
     console.debug(`${url} is not a valid feed`);
@@ -177,13 +210,18 @@ async function url_is_feed(url) {
 /**
  * Simple helper method for parsing a feed
  */
-async function _create_feed(str) {
-  const feed = await feedparser.parse(str, {
+async function _create_feed(url/*str*/) {
+  // let feed = new FeedParser();
+  let feed = await fp.parse({
+    uri: url,
+    method: 'GET',
+    gzip: true,
+  } /*str*/, { // TODO: make this accept an html string instead of re-doing the request
+    // TODO: const to_stream = require('into-stream'); to_stream(str).pipe(process.stdout);
     normalize: true,
     addmeta: true,
-    resume_saxerror: false,
+    resume_saxerror: true,
   });
-  console.debug(feed);
   return feed;
 }
 
@@ -199,7 +237,21 @@ function get_base_url(url) {
   return base_url;
 }
 
+
+/**
+ * Get feed articles
+ */
+async function get_feed_articles(feed_url) {
+  // TODO: validate feed_url
+
+  // TODO: plugins
+
+  //debugger;
+  return _create_feed(feed_url);
+}
+
 exports.url_is_feed = url_is_feed;
 exports.http_request = http_request;
 exports.find_feed_urls = find_feed_urls;
 exports.get_base_url = get_base_url;
+exports.get_feed_articles = get_feed_articles;

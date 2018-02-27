@@ -70,10 +70,14 @@ async function getReadOnlyTestDB() {
   return sequelize;
 }
 
-before('Create readonly db', async () => {
-  global.readonly = await getReadOnlyTestDB();
-});
+try { // these will error if trying to require('./tests') from cli
+  before('Create readonly db', async () => {
+    global.readonly = await getReadOnlyTestDB();
+  });
 
-after('Delete test data', () => {
-  rimraf(tmpdir, () => {});
-});
+  after('Delete test data', () => {
+    rimraf(tmpdir, () => {});
+  });
+} catch(e) {
+  // do nothing
+}
