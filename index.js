@@ -45,9 +45,9 @@ router.post('/api/login', (ctx, next) => {
 
 router.post('/api/logout', (ctx, next) => {
   let status = { status: 'OK' };
-  if (false) {
-    status = { error: 'NOT_LOGGED_IN' };
-  }
+  // if (false) {
+  //   status = { error: 'NOT_LOGGED_IN' };
+  // }
   ctx.response.body = JSON.stringify(status);
 });
 

@@ -12,7 +12,7 @@ console.debug = function(args) {
   if (process.env.DEBUG == 'true'){
     console.log(args);
   }
-}
+};
 
 /**
  * find_feed_url
@@ -49,7 +49,7 @@ async function find_feed_urls(url) {
     } catch(e) {
       // TODO: difference between `throw Exception()` and `throw new Error()` ???
       // see: https://www.joyent.com/node-js/production/design/errors
-      throw Exception('Error looking at original URL');
+      throw Error('Error looking at original URL');
     }
   }
 
@@ -172,7 +172,7 @@ async function http_request(url, opts) {
   };
   opts = opts || {};
   opts = Object.assign(default_opts, opts);
-  return await rp(opts)
+  return await rp(opts);
 }
 
 

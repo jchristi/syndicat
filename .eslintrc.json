@@ -8,7 +8,7 @@
       "ecmaVersion": 2018,
       "sourceType": "script",
       "ecmaFeatures": {
-        "impliedStrict": true
+        "impliedStrict": false
       }
     },
     "rules": {
@@ -19,7 +19,7 @@
         "semi": [ 2, "always" ],
         "curly": [ 0, "multi", "consistent" ],
         "no-console": 0,
-        "no-unused-vars": [ 1, {
+        "no-unused-vars": [ 0, {
             "args": "after-used",
             "argsIgnorePattern": "^_",
             "varsIgnorePattern": "^_"

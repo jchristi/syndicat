@@ -1,9 +1,9 @@
 'use strict';
 
-const _       = require('lodash');
-const cheerio = require('cheerio');
-const request = require('request-promise');
-const funcs   = require('../functions/feeds');
+// const _       = require('lodash');
+// const cheerio = require('cheerio');
+// const request = require('request-promise');
+// const funcs   = require('../functions/feeds');
 
 /**
  * Feed
@@ -13,7 +13,7 @@ const funcs   = require('../functions/feeds');
  * FeedEntries for each.
  */
 module.exports = function(sequelize, DataTypes) {
-  let Feed = sequelize.define('Feed', {
+  var Feed = sequelize.define('Feed', {
 
     //
     // Attributes
@@ -203,15 +203,15 @@ module.exports = function(sequelize, DataTypes) {
     // validate URL
     // normalize URL
     // check if already subscribed
-    let feed = await Feed.create({
-      owner_uid: i,
-      title: 'test title',
-      feed_url: feed_url,
-      icon_url: '',
-      update_interval: 1000000,
-      site_url: ''
-    });
-    return feed;
+    // let feed = await Feed.create({
+    //   owner_uid: i,
+    //   title: 'test title',
+    //   feed_url: feed_url,
+    //   icon_url: '',
+    //   update_interval: 1000000,
+    //   site_url: ''
+    // });
+    // return feed;
   };
 
   return Feed;
