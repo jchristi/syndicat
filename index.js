@@ -33,15 +33,6 @@ app.context.models = require('./models')(app.context.db);
 //   log.error('server error', err)
 // });
 
-
-/**
- * Tiny-Tiny-RSS API
- * @see: https://git.tt-rss.org/fox/tt-rss/wiki/ApiReference
- */
-
-// TODO: config option for default endpoint api? (default: ttrss)
-const router  = new Router({ prefix: '/api' });
-
 // helper function for converting a sequelize queryset to a json string
 function querysetToJSON(qs) {
   let json = [];
@@ -51,6 +42,101 @@ function querysetToJSON(qs) {
   }
   return `[${json.join(',')}]`;
 }
+
+/**
+ * Tiny-Tiny-RSS backend.php emulation
+ * @see: https://git.tt-rss.org/fox/tt-rss/src/master/backend.php
+ */
+const backend_router = new Router();
+backend_router.post('/backend.php', async (ctx, next) => {
+  let data = await parse.json(ctx); // TODO: error checking
+  let op      = data.op; // TODO: error checking
+  let method;
+  if ('subop' in data) {
+    method = data.subop;
+  } else if ('method' in data) {
+    method = data.method;
+  } else {
+    method = 'index';
+  }
+
+  let public_calls = [
+    'globalUpdateFeeds',
+    'rss',
+    'getUnread',
+    'getProfiles',
+    'share',
+    'fbexport',
+    'logout',
+    'pubsub'
+  ];
+  if (method in public_calls) {
+    ctx.redirect(`public.php?${qs}`);
+    ctx.status = 301;
+    ctx.response.body = '';
+    return;
+  }
+
+  let csrf_token = data.csrf_token;
+  // TODO: check session
+
+  const purge_intervals = {
+    -1: 'Never Purge',
+    0:  'Use default',
+    5:  '1 week old',
+    14: '2 weeks old',
+    31: '1 month old',
+    60: '2 months old',
+    90: '3 months old',
+  };
+  const update_intervals = {
+    -1:    'Disable updates',
+    0:     'Default interval',
+    15:    '15 minutes',
+    30:    '30 minutes',
+    60:    'Hourly',
+    240:   '4 hours',
+    720:   '12 hours',
+    1440:  'Daily',
+    10080: 'Weekly',
+  };
+  const update_intervals_no_default = {
+    -1:    'Disable updates',
+    15:    '15 minutes',
+    30:    '30 minutes',
+    60:    'Hourly',
+    240:   '4 hours',
+    720:   '12 hours',
+    1440:  'Daily',
+    10080: 'Weekly',
+  };
+  const access_level_names = {
+    0: 'User',
+    5: 'Power User',
+    10: 'Administrator',
+  };
+  try {
+    // TODO: don't use 'new' ???
+    const handler = new require(`./handlers/${op.replace('/-/g', '_')}`);
+    handler[method]();
+  } catch (e) {
+    throw Error('method does not exist');
+    // TODO: return error json
+  }
+
+  ctx.request.data = data;
+});
+app.use(backend_router.routes());
+app.use(backend_router.allowedMethods());
+
+
+/**
+ * Tiny-Tiny-RSS API
+ * @see: https://git.tt-rss.org/fox/tt-rss/wiki/ApiReference
+ */
+
+// TODO: config option for default endpoint api? (default: ttrss)
+const router  = new Router({ prefix: '/api' });
 
 router.post('/', async (ctx, next) => {
   ctx.request.data = await parse.json(ctx); // TODO: error checking
