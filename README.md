@@ -18,10 +18,46 @@ A few features that *may* be implemented in the future:
 * Article content compression in database BLOB field (Snappy, EXI, or Fast Infoset)
   * Snappy - [node-snappy](https://github.com/kesla/node-snappy)
   * EXI - [exificient.js](https://github.com/EXIficient/exificient.js)
+  * [MariaDB page compression](https://mariadb.com/kb/en/library/compression/)
 * Aggregate similar or duplicate / linked articles
+  * use LDA algorithm for similarity
 * Smart ranking and filtering
-* Scrapper plugins to convert HTML pages to feeds ([YouTube](https://github.com/porjo/freshtube/blob/master/js/script.js), [Twitter](https://www.ibm.com/developerworks/library/wa-convert-your-twitter-lists-to-rss/index.html), [Google+](https://www.labnol.org/internet/google-plus-rss-feeds/25557/), GitHub, Twitch.tv)
+  * Popularity score via Twitter, Alexa, etc.
+* Non-RSS sources, scrapper plugins to convert HTML pages to feeds
+  * [YouTube](https://github.com/porjo/freshtube/blob/master/js/script.js)
+  * [Twitter](https://www.ibm.com/developerworks/library/wa-convert-your-twitter-lists-to-rss/index.html)
+  * [Google+](https://www.labnol.org/internet/google-plus-rss-feeds/25557/)
+  * Google Groups
+  * GitHub
+  * Twitch.tv
+  * Mailing Lists
 * Masquerade user-agent string [1](https://techblog.willshouse.com/2012/01/03/most-common-user-agents/), [2](https://udger.com/resources/ua-list)
+* Use of AWS services (or IBM or Azure or other clouds):
+  * AWS Lambda + Serverless Aurora or DynamoDB + Fargate for very cheap hosting
+  * Amazon Comprehend - analysis of articles for sentiment, keywords, topics, etc
+  * Amazon Polly - text to speech
+  * Amazon Transcribe - speech to text (podcasts, youtube videos, etc)
+  * Amazon Neptune - graph database (see alos wikidata.org)
+* Discover similar sites/feeds
+  * Alexa.com [find similar sites](https://www.alexa.com/find-similar-sites)
+    * alexa.com/siteinfo/whatever.com
+  * [TopSimilarSites.com](http://www.topsimilarsites.com) - pretty good (might use alexa)
+  * [moreofit.com](http://www.moreofit.com) - very good
+  * [SimilarSites.com](https://www.similarsites.com)
+  * [SimilarSiteSearch](https://www.similarsitesearch.com) - doesnt work as of Mar 2018
+  * [SimilarPages.com](http://www.similarpages.com) - not very good
+  * Google.com search "related:whatever.com"
+  * Google.com search "link:whatever.com -site:whatever.com" (sites that link to whatever.com)
+  * Crawl full text of all posts and look for commonly linked sites
+* Automatically determine your favorite feeds and score them higher
+* Allow comments to be added to feeds and articles
+* See Flipboard for ideas. Also [engineering.flipboard.com](http://engineering.flipboard.com)
+* [Similar/Related articles](http://engineering.flipboard.com/2017/02/storyclustering)
+  * Mark related/similar articles as read
+* Dead feed finder/notifier719288
+* Fetch entire history of a website
+* Historical stats on a feed (like Trends) including how often it is read by you
+
 
 ## Contributing
 Contributions welcome. Please include mocha tests with all PRs.

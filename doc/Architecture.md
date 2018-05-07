@@ -1,6 +1,6 @@
 # JSON REST API
 Tiny-Tiny-RSS implements a session-based REST API. But this is not ideal. We would rather
-use a stateless REST API which is a better design
+use a stateless REST API which is a better design (maybe a "2.0" enhancement).
 [1](https://stackoverflow.com/a/3105337)
 [2](https://stackoverflow.com/a/3106962)
 [3](https://stackoverflow.com/a/2641993).
@@ -90,6 +90,8 @@ allow for that option. I am interested to know what the overhead would be in all
 implementations. Another consideration is how long-lived the full article content would
 live. In many cases, the full article might be desired for longer than normal feed
 articles (think archived or saved articles).
+
+MariaDB has its own options for [page compression](https://mariadb.com/kb/en/library/compression/).
 
 # HTTP Server
 See https://www.nginx.com/blog/5-performance-tips-for-node-js-applications/
