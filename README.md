@@ -31,6 +31,7 @@ A few features that *may* be implemented in the future:
   * GitHub
   * Twitch.tv
   * Mailing Lists
+  * Hacker News
 * Masquerade user-agent string [1](https://techblog.willshouse.com/2012/01/03/most-common-user-agents/), [2](https://udger.com/resources/ua-list)
 * Use of AWS services (or IBM or Azure or other clouds):
   * AWS Lambda + Serverless Aurora or DynamoDB + Fargate for very cheap hosting
@@ -57,6 +58,8 @@ A few features that *may* be implemented in the future:
 * Dead feed finder/notifier719288
 * Fetch entire history of a website
 * Historical stats on a feed (like Trends) including how often it is read by you
+* Slider to show from "Only most important articles" to "All and more" for a category or view
+* Automatic detection of blog categories and provide UI for selecting which categories to subscribe to
 
 
 ## Contributing
